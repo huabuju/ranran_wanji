@@ -1,0 +1,16 @@
+pub mod apps;
+pub mod boot_patch;
+pub mod device;
+pub mod downloader;
+pub mod file_manager;
+pub mod github_apk;
+pub mod hyperos;
+pub mod miuier;
+pub mod payload;
+pub mod rom_data;
+mod rom_client;
+pub mod rom_region;
+pub mod runtime_assets;
+pub mod system;
+pub mod xfu;
+pub mod xiaomirom;

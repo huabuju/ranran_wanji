@@ -1,0 +1,20 @@
+@mixin overview-main-card-hover($background: null, $borderColor: var(--color-primary)) {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-card) !important;
+
+  @if $borderColor != null {
+    border-color: $borderColor !important;
+  }
+
+  @if $background != null {
+    background: $background !important;
+  }
+}
+
+@mixin overview-main-card-hoverable($background: null, $borderColor: var(--color-primary)) {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    @include overview-main-card-hover($background, $borderColor);
+  }
+}

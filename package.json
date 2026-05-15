@@ -1,0 +1,41 @@
+{
+  "name": "ranran-toolkit",
+  "private": true,
+  "version": "1.0.18",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:generate-codename-model-map": "cargo run --manifest-path src-tauri/Cargo.toml --example generate_codename_model_map",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "clean:tauri": "cargo clean --manifest-path src-tauri/Cargo.toml",
+    "build:tauri": "cargo clean --manifest-path src-tauri/Cargo.toml && tauri build",
+    "build:runtime-assets": "node scripts/build-runtime-assets.cjs",
+    "build:portable": "node scripts/build-zip.cjs",
+    "build:all": "cargo clean --manifest-path src-tauri/Cargo.toml && tauri build && node scripts/build-zip.cjs && node scripts/build-runtime-assets.cjs"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "@tauri-apps/api": "2.11.0",
+    "@tauri-apps/plugin-dialog": "^2.7.0",
+    "@tauri-apps/plugin-fs": "^2.5.0",
+    "@tauri-apps/plugin-opener": "^2",
+    "@vueuse/core": "^14.2.1",
+    "axios": "^1.13.6",
+    "dayjs": "^1.11.19",
+    "element-plus": "^2.13.5",
+    "sass": "^1.98.0",
+    "vue": "^3.5.13",
+    "vue-draggable-plus": "^0.6.1",
+    "vue-router": "^5.0.3"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "archiver": "^7.0.1",
+    "unplugin-auto-import": "^21.0.0",
+    "unplugin-vue-components": "^31.0.0",
+    "vite": "^6.0.3"
+  }
+}

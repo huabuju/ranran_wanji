@@ -1,0 +1,36 @@
+@use '@/assets/styles/_page-card.scss' as pageCard;
+
+.command-card {
+  position: relative;
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-card);
+  min-width: 0;
+  @include pageCard.overview-main-card-hoverable(var(--bg-glass));
+
+  &.is-batch-mode {
+    padding-top: 44px;
+
+    &.is-selectable {
+      cursor: pointer;
+    }
+
+    &.is-disabled {
+      cursor: not-allowed;
+      opacity: 0.78;
+    }
+
+    &.is-selected {
+      border-color: var(--color-danger);
+      box-shadow: 0 10px 30px rgba(var(--color-danger-rgb), 0.18);
+      background: rgba(var(--color-danger-rgb), 0.04);
+    }
+  }
+}

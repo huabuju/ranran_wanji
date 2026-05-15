@@ -1,0 +1,118 @@
+@use '@/assets/styles/_page-card.scss' as pageCard;
+
+.ctrl-card {
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-card);
+  @include pageCard.overview-main-card-hoverable(var(--bg-glass));
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+
+    .ctrl-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      flex-shrink: 0;
+    }
+
+    .header-hint {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .header-action {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+  }
+
+  &__body {
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.info-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  background: rgba(var(--color-primary-rgb), 0.06);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.12);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+
+  b {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-group-tight {
+  margin-top: 4px;
+}
+
+.field-group-spacious {
+  margin-top: 12px;
+}
+
+.field-label {
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.row-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dim-sep {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.flex-grow-input,
+.flex-grow-button {
+  flex: 1;
+}
+
+.divider {
+  height: 1px;
+  background: var(--color-border);
+}
+
+.section-divider {
+  margin: 16px 0 12px;
+}

@@ -1,0 +1,89 @@
+@mixin overview-dashboard-card-shell {
+  background: var(--surface-strong);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 12px);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  @supports (backdrop-filter: blur(10px)) {
+    background: var(--bg-glass);
+    backdrop-filter: var(--blur-glass);
+  }
+}
+
+@mixin overview-hover-lift(
+  $translateY: -2px,
+  $borderColor: var(--color-primary),
+  $shadow: var(--shadow-card)
+) {
+  transform: translateY($translateY);
+  border-color: $borderColor;
+  box-shadow: $shadow;
+}
+
+@mixin overview-soft-panel(
+  $radius: 18px,
+  $borderColor: color-mix(in srgb, var(--color-border) 72%, white 14%),
+  $surface: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.44)),
+  $accent: null
+) {
+  border-radius: $radius;
+  border: 1px solid $borderColor;
+  @if $accent == null {
+    background: $surface;
+  } @else {
+    background: $surface, $accent;
+  }
+}
+
+@mixin overview-interactive-panel(
+  $radius: 18px,
+  $borderColor: color-mix(in srgb, var(--color-border) 72%, white 14%),
+  $surface: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.44)),
+  $accent: null,
+  $transition: (transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease),
+  $positioned: false,
+  $hiddenOverflow: false
+) {
+  @include overview-soft-panel($radius, $borderColor, $surface, $accent);
+
+  @if $positioned {
+    position: relative;
+  }
+
+  @if $hiddenOverflow {
+    overflow: hidden;
+  }
+
+  transition: $transition;
+}
+
+@mixin overview-icon-box(
+  $size: 44px,
+  $radius: 12px,
+  $background: rgba(var(--color-primary-rgb), 0.1),
+  $color: var(--color-primary)
+) {
+  width: $size;
+  height: $size;
+  border-radius: $radius;
+  background: $background;
+  color: $color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+@mixin overview-icon-box-elevated(
+  $size: 44px,
+  $radius: 12px,
+  $background: rgba(var(--color-primary-rgb), 0.1),
+  $color: var(--color-primary),
+  $shadow: inset 0 0 0 1px var(--border-strong)
+) {
+  @include overview-icon-box($size, $radius, $background, $color);
+  box-shadow: $shadow;
+}

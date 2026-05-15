@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "RanranToolkit",
+  "version": "../package.json",
+  "identifier": "com.xiaowan.ranran-toolkit",
+  "build": {
+    "beforeDevCommand": "yarn dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "yarn build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "然然玩机工具箱",
+        "width": 1200,
+        "height": 800,
+        "center": true,
+        "visible": false,
+        "decorations": false
+      },
+      {
+        "label": "splashscreen",
+        "url": "/splashscreen.html",
+        "width": 1200,
+        "height": 800,
+        "center": true,
+        "decorations": false,
+        "transparent": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "windows": {
+      "wix": {
+        "language": "zh-CN"
+      }
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

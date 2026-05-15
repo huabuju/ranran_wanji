@@ -1,0 +1,26 @@
+@use '@/assets/styles/_page-card.scss' as pageCard;
+
+.custom-card {
+  background: var(--bg-glass) !important;
+  backdrop-filter: var(--blur-glass) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-card) !important;
+  @include pageCard.overview-main-card-hoverable(var(--bg-glass));
+
+  :deep(.el-card__header) {
+    padding: 18px 24px 14px 24px;
+    border-bottom: 1px solid var(--color-divider);
+  }
+
+  :deep(.el-card__body) {
+    padding: 24px;
+  }
+}
+
+.card-header {
+  font-size: 16px;
+  font-weight: 600;
+  gap: 8px;
+  color: var(--color-text-primary);
+}
