@@ -12,6 +12,10 @@
     <h1 class="app-name">{{ title }}</h1>
     <p class="app-subtitle">
       <span class="version">v{{ version }}</span>
+      <template v-if="buildTime">
+        <span class="divider">•</span>
+        <span class="build-time">打包于 {{ buildTime }}</span>
+      </template>
       <span class="divider">•</span>
       <span class="description">{{ description }}</span>
     </p>
@@ -29,6 +33,7 @@ import SmartIcon from '@/components/common/SmartIcon.vue';
 defineProps({
   title: { type: String, required: true },
   version: { type: String, required: true },
+  buildTime: { type: String, default: '' },
   description: { type: String, required: true },
   runtimePath: { type: String, default: '' },
   runtimePathFull: { type: String, default: '' },
@@ -70,6 +75,8 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 3px;
   padding: 2px 0;
   box-sizing: border-box;
   color: var(--color-text-secondary);
@@ -79,4 +86,5 @@ defineProps({
 .divider {
   opacity: 0.3;
 }
+
 </style>

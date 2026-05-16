@@ -3,6 +3,7 @@
     <AboutHeroSection
       title="然然玩机工具箱"
       :version="version"
+      :build-time="buildTime"
       :runtime-path="runtimePathDisplay"
       :runtime-path-full="toolRuntimePath"
       description="专业的安卓设备管理工具"
@@ -38,6 +39,7 @@ import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/core';
 import { ElMessage } from 'element-plus';
 import SponsorDialog from '@/components/about/SponsorDialog.vue';
+import { formatDateTime } from '@/utils/date';
 import { checkUpdate, fetchUpdateInfo } from '@/utils/updater';
 import { useUpdateStore } from '@/utils/updateStore';
 import {
@@ -54,6 +56,7 @@ const showChangelogDialog = ref(false);
 const loadingChangelog = ref(false);
 
 const version = ref('1.0.0');
+const buildTime = ref('');
 const currentYear = new Date().getFullYear();
 const toolRuntimePath = ref('--');
 
@@ -158,10 +161,20 @@ const refresh = async () => {
   } catch (error) {}
 };
 
+function resolveBuildTime() {
+  if (typeof __APP_BUILD_TIME__ !== 'string' || !__APP_BUILD_TIME__) {
+    return '';
+  }
+
+  return formatDateTime(__APP_BUILD_TIME__, 'YYYY-MM-DD HH:mm:ss');
+}
+
 defineExpose({ refresh });
 
 onMounted(async () => {
   console.log('About page mounted');
+  buildTime.value = resolveBuildTime();
+
   try {
     version.value = await getVersion();
   } catch (error) {

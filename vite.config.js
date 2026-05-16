@@ -10,6 +10,10 @@ const host = "127.0.0.1";
 
 // https://vite.dev/config/
 export default defineConfig(async () => ({
+  define: {
+    __APP_BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
+
   plugins: [
     vue(),
     AutoImport({

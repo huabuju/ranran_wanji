@@ -4,7 +4,7 @@
 
 > 基于 **Tauri 2 + Vue 3** 构建的现代化 Android 设备管理工具。轻量、美观、极速。
 
-[![Release](https://img.shields.io/badge/Release-1.0.18-blue)](#)
+[![Release](https://img.shields.io/badge/Release-1.0.19-blue)](#)
 [![OS Support](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-green)](#)
 [![Tech Stack](https://img.shields.io/badge/Stack-Tauri%202%20%2B%20Vue%203-orange)](#)
 [![License](https://img.shields.io/badge/License-MIT-blue)](#)
