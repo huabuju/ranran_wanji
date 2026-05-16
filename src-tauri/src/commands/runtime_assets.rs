@@ -1,8 +1,6 @@
 #![cfg_attr(dev, allow(dead_code))]
 
-use crate::adb::core::{adb_run_async, AppPaths};
-#[cfg(dev)]
-use crate::adb::core::get_bin_root_dir;
+use crate::adb::core::{adb_run_async, get_bin_root_dir, AppPaths};
 use hex::encode as hex_encode;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -149,6 +147,29 @@ fn has_required_files(bin_dir: &Path, required_files: &[String]) -> bool {
     required_files
         .iter()
         .all(|relative| bin_dir.join(relative).is_file())
+}
+
+fn ensure_bundled_runtime_ready(app: &AppHandle) -> Result<PathBuf, String> {
+    let runtime_bin = get_bin_root_dir(app);
+    if !runtime_bin.is_dir() {
+        return Err(format!(
+            "未找到内置运行时依赖目录，请确认安装包已包含 bin 资源：{}",
+            runtime_bin.display()
+        ));
+    }
+
+    let required_files = default_required_files()
+        .into_iter()
+        .map(str::to_string)
+        .collect::<Vec<_>>();
+    if !has_required_files(&runtime_bin, &required_files) {
+        return Err(format!(
+            "内置运行时依赖不完整，请重新安装或重新构建应用：{}",
+            runtime_bin.display()
+        ));
+    }
+
+    Ok(runtime_bin)
 }
 
 fn load_install_state(app: &AppHandle) -> Option<RuntimeInstallState> {
@@ -580,6 +601,31 @@ pub async fn prepare_runtime_assets(app: AppHandle) -> Result<RuntimeAssetsResul
 
     #[cfg(not(dev))]
     {
+        emit_progress(
+            &app,
+            "check",
+            "正在检查内置运行时依赖...",
+            2.0,
+            None,
+            None,
+            None,
+        );
+        let runtime_dir = ensure_bundled_runtime_ready(&app)?.display().to_string();
+        emit_progress(
+            &app,
+            "ready",
+            "已检测到内置运行时依赖",
+            100.0,
+            None,
+            None,
+            None,
+        );
+        return Ok(RuntimeAssetsResult {
+            source: "bundle".to_string(),
+            version: "bundled".to_string(),
+            runtime_dir,
+        });
+
         crate::commands::system::force_stop_runtime_processes(&app);
         emit_progress(
             &app,

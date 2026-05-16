@@ -95,10 +95,10 @@ yarn clean:tauri
 # 仅构建 Tauri 安装包
 yarn build:tauri
 
-# 仅生成首启联网版便携包
+# 仅生成内置运行时依赖便携包
 yarn build:portable
 
-# 仅生成运行时依赖分卷与 manifest
+# 仅生成运行时依赖分卷与 manifest（旧分发方案）
 yarn build:runtime-assets
 ```
 
@@ -116,15 +116,15 @@ yarn build:runtime-assets
 - `nsis`
 - 以及其他 Tauri 目标产物
 
-#### 2. 首启联网版便携包
+#### 2. 内置运行时依赖便携包
 
 位于：
 
 - `src-tauri/target/release/bundle/portable/`
 
-当前便携包只包含主程序，不再内置 `bin/`。
+当前便携包会包含主程序与 `bin/`，并自动排除 `bin/cloud-parts/`。
 
-#### 3. 运行时依赖分卷
+#### 3. 可选：运行时依赖分卷（旧分发方式）
 
 位于：
 
@@ -139,47 +139,38 @@ yarn build:runtime-assets
 
 ### 四、发布时必须上传的文件
 
-每次发版至少需要同步发布两类内容：
+当前默认发版只需要同步发布一类内容：
 
 1. 应用安装包 / 便携启动包
    来源：`src-tauri/target/release/bundle/`
-2. 首启运行时依赖分卷
-   来源：`ranran-toolkit-bin/cloud-parts/`
-   必须包含：
-   - `runtime-manifest.json`
-   - 全部 `bin-runtime.zip.*` 分卷文件
 
-如果只上传安装包，没有上传新的 `runtime-manifest.json` 和分卷，用户首次启动时将无法自动补齐运行时依赖。
+如果仍需维护旧的外部分卷分发方案，可额外发布 `bin/cloud-parts/` 下的 `runtime-manifest.json` 与全部 `bin-runtime.zip.*`。
 
 ### 五、推荐发布顺序
 
 1. 更新 `package.json` 版本号
 2. 执行 `yarn clean:tauri`
 3. 执行 `yarn build:all`
-4. 检查 `bin/cloud-parts/` 是否生成了新的 `runtime-manifest.json` 和全部分卷
-   并确认这些文件已同步提交到 `ranran-toolkit-bin` 仓库
-5. 检查 `src-tauri/target/release/bundle/` 下安装包是否生成成功
-6. 上传安装包
-7. 将 `runtime-manifest.json` 和所有 `bin-runtime.zip.*` 同步到 `ranran-toolkit-bin` 仓库
-8. 如有在线更新机制，再同步更新 `update.json`
-9. 用一台没有本地运行时缓存的机器做一次首启验证
+4. 检查 `src-tauri/target/release/bundle/` 下安装包与便携包是否生成成功
+5. 上传安装包 / 便携包
+6. 如有在线更新机制，再同步更新 `update.json`
+7. 用一台没有本地运行时缓存的机器做一次首启验证
 
 ### 六、发布后验证清单
 
 建议至少验证以下项目：
 
 1. 新安装的应用可以正常启动
-2. 首次启动时能看到运行时初始化界面
-3. 能成功下载全部分卷
-4. 能成功合并、校验并解压到本地运行时目录
-5. `ADB / Fastboot / Scrcpy / Aria2 / link-dumper` 可正常调用
-6. 二次启动时不会重复下载
+2. 首次启动时无需联网下载运行时依赖
+3. `ADB / Fastboot / Scrcpy / Aria2 / link-dumper` 可正常调用
+4. 便携包解压后可以直接使用
 
 ### 七、常见注意事项
 
-- 新版本客户端依赖的是 `zip` 分卷 + `runtime-manifest.json`
+- 新版本默认依赖安装包 / 便携包内置的 `bin/`
 - 旧的 `bin.7z.xxx` 不能直接继续给当前这套首启流程使用
-- 如果 `bin/` 有任何内容变更，都应该重新执行 `yarn build:runtime-assets`
+- 如果 `bin/` 有任何内容变更，都应该重新执行 `yarn build:tauri` 与 `yarn build:portable`
+- `yarn build:runtime-assets` 仅在维护旧的外部分卷分发方案时才需要执行
 - 如果是全新克隆主仓库，请使用 `git clone --recurse-submodules`，或在克隆后执行 `git submodule update --init --recursive`
 - 如果只改了前端或 Rust 代码、没有改 `bin/`，理论上可以只重新构建应用安装包，但正式发布时仍建议完整跑一次 `yarn build:all`
 

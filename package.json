@@ -13,7 +13,7 @@
     "build:tauri": "cargo clean --manifest-path src-tauri/Cargo.toml && tauri build",
     "build:runtime-assets": "node scripts/build-runtime-assets.cjs",
     "build:portable": "node scripts/build-zip.cjs",
-    "build:all": "cargo clean --manifest-path src-tauri/Cargo.toml && tauri build && node scripts/build-zip.cjs && node scripts/build-runtime-assets.cjs"
+    "build:all": "cargo clean --manifest-path src-tauri/Cargo.toml && tauri build && node scripts/build-zip.cjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",

@@ -109,6 +109,12 @@ fn project_bin_dir() -> PathBuf {
     manifest_dir.parent().unwrap_or(manifest_dir).join("bin")
 }
 
+#[cfg(not(dev))]
+fn packaged_bin_dir(app: &tauri::AppHandle) -> PathBuf {
+    use tauri::Manager;
+    app.path().resource_dir().unwrap_or_default().join("bin")
+}
+
 pub fn get_bin_root_dir(_app: &tauri::AppHandle) -> PathBuf {
     #[cfg(dev)]
     {
@@ -116,12 +122,7 @@ pub fn get_bin_root_dir(_app: &tauri::AppHandle) -> PathBuf {
     }
     #[cfg(not(dev))]
     {
-        use tauri::Manager;
-        _app.path()
-            .app_local_data_dir()
-            .unwrap_or_default()
-            .join("runtime")
-            .join("bin")
+        packaged_bin_dir(_app)
     }
 }
 

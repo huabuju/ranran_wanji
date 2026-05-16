@@ -67,6 +67,7 @@ const OVERVIEW_USAGE_GUIDE_SHOWN_KEY = 'overview_usage_guide_shown';
 let unlistenRuntimeProgress = null;
 const runtimeSourceLabels = {
   dev: '开发环境本地 bin',
+  bundle: '安装包内置资源',
   'runtime-cache': '本地缓存',
   'runtime-cache-offline': '本地缓存（离线模式）',
   download: '在线下载',
@@ -134,7 +135,7 @@ async function ensureRuntimeReady() {
     runtimeReady.value = true;
   } catch (error) {
     runtimeError.value = error?.toString?.() || '运行时依赖初始化失败';
-    runtimeMessage.value = '运行时依赖准备失败，请检查网络、远端清单和分卷文件，必要时请重启电脑后重试';
+    runtimeMessage.value = '运行时依赖准备失败，请确认安装包中的 bin 资源完整后重试';
   } finally {
     runtimePreparing.value = false;
   }

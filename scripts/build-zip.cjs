@@ -7,9 +7,20 @@ const pkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf
 const VERSION = pkg.version;
 const APP_NAME = 'RanranToolkit';
 const EXE_SRC = path.join(ROOT_DIR, 'src-tauri', 'target', 'release', `${APP_NAME}.exe`);
+const BIN_DIR = path.join(ROOT_DIR, 'bin');
 const OUTPUT_DIR = path.join(ROOT_DIR, 'src-tauri', 'target', 'release', 'bundle', 'portable');
-const ZIP_NAME = `${APP_NAME}-v${VERSION}-bootstrap-windows-x86_64.zip`;
+const ZIP_NAME = `${APP_NAME}-v${VERSION}-portable-windows-x86_64.zip`;
 const ZIP_PATH = path.join(OUTPUT_DIR, ZIP_NAME);
+
+function getPackagedBinDirectories() {
+  if (!fs.existsSync(BIN_DIR)) {
+    return [];
+  }
+
+  return fs.readdirSync(BIN_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name !== 'cloud-parts')
+    .map((entry) => entry.name);
+}
 
 async function buildZip() {
   if (!fs.existsSync(EXE_SRC)) {
@@ -26,6 +37,7 @@ async function buildZip() {
   return new Promise((resolve, reject) => {
     const output = fs.createWriteStream(ZIP_PATH);
     const archive = archiver('zip', { zlib: { level: 9 } });
+    const packagedBinDirectories = getPackagedBinDirectories();
 
     output.on('close', resolve);
     archive.on('warning', (error) => {
@@ -39,6 +51,9 @@ async function buildZip() {
 
     archive.pipe(output);
     archive.file(EXE_SRC, { name: `${APP_NAME}.exe` });
+    for (const directoryName of packagedBinDirectories) {
+      archive.directory(path.join(BIN_DIR, directoryName), path.join('bin', directoryName));
+    }
     archive.finalize();
   });
 }
@@ -46,7 +61,7 @@ async function buildZip() {
 buildZip()
   .then(() => {
     const sizeKB = (fs.statSync(ZIP_PATH).size / 1024).toFixed(1);
-    console.log(`[done] Portable bootstrap package created: ${ZIP_PATH}`);
+    console.log(`[done] Portable package created: ${ZIP_PATH}`);
     console.log(`[size] ${sizeKB} KB`);
   })
   .catch((error) => {

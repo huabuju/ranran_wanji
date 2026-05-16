@@ -37,6 +37,17 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "resources": {
+      "../bin/7-Zip-core": "bin/7-Zip-core",
+      "../bin/app-tools": "bin/app-tools",
+      "../bin/aria2-core": "bin/aria2-core",
+      "../bin/boot-patch": "bin/boot-patch",
+      "../bin/link-dumper": "bin/link-dumper",
+      "../bin/platform-tools": "bin/platform-tools",
+      "../bin/rom-data": "bin/rom-data",
+      "../bin/scrcpy-core": "bin/scrcpy-core",
+      "../bin/usb-driver": "bin/usb-driver"
+    },
     "windows": {
       "wix": {
         "language": "zh-CN"
