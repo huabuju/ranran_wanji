@@ -235,7 +235,7 @@ async function handleOpenTokenPage() {
   border: 1px solid rgba(var(--color-primary-rgb), 0.08);
   background:
     linear-gradient(90deg, rgba(var(--color-primary-rgb), 0.035), rgba(var(--color-primary-rgb), 0.015)),
-    rgba(255, 255, 255, 0.38);
+    var(--surface-panel);
 }
 
 .token-strip__lead {
@@ -299,7 +299,7 @@ async function handleOpenTokenPage() {
 .token-input--strip :deep(.el-input__wrapper) {
   min-height: 34px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72) !important;
+  background: var(--surface-elevated) !important;
   box-shadow:
     inset 0 0 0 1px rgba(var(--color-primary-rgb), 0.06),
     0 6px 16px -14px rgba(15, 23, 42, 0.3) !important;
@@ -307,6 +307,7 @@ async function handleOpenTokenPage() {
 
 .token-input--strip :deep(.el-input__wrapper:hover),
 .token-input--strip :deep(.el-input__wrapper.is-focus) {
+  background: var(--surface-elevated-strong) !important;
   box-shadow:
     inset 0 0 0 1px rgba(var(--color-primary-rgb), 0.16),
     0 8px 18px -16px rgba(var(--color-primary-rgb), 0.32) !important;

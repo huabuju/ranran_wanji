@@ -3,7 +3,7 @@
     v-model="visible"
     title="工具使用说明"
     width="620px"
-    top="5vh"
+    align-center
     class="app-dialog-shell overview-usage-dialog"
     :close-on-click-modal="true"
     append-to-body
@@ -71,7 +71,7 @@ defineExpose({ open });
 <style lang="scss" scoped>
 .overview-usage-dialog {
   .el-dialog__header {
-    padding: 20px 24px 10px;
+    // padding: 20px 24px 10px;
   }
 
   .el-dialog__title {

@@ -558,7 +558,7 @@ function toggleOption(item) {
   padding: 10px 12px;
   border-radius: 16px;
   border: 1px solid rgba(var(--color-warning-rgb), 0.18);
-  background: color-mix(in srgb, var(--surface-panel) 94%, white 6%);
+  background: color-mix(in srgb, var(--surface-panel) 94%, var(--surface-panel-strong) 6%);
 }
 
 .hero-risk-card p {
@@ -599,8 +599,8 @@ function toggleOption(item) {
   min-height: 56px;
   padding: 8px 10px;
   border-radius: 16px;
-  border: 1px solid color-mix(in srgb, var(--border-soft) 82%, rgba(255, 255, 255, 0.38));
-  background: color-mix(in srgb, var(--surface-panel) 92%, white 8%);
+  border: 1px solid color-mix(in srgb, var(--border-soft) 82%, var(--border-strong) 18%);
+  background: color-mix(in srgb, var(--surface-panel) 92%, var(--surface-panel-strong) 8%);
   cursor: pointer;
   transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease, opacity 0.24s ease, background 0.24s ease;
 }
@@ -618,7 +618,7 @@ function toggleOption(item) {
 
 .check-card.is-checked {
   border-color: rgba(var(--color-primary-rgb), 0.28);
-  background: color-mix(in srgb, var(--surface-panel) 90%, white 10%);
+  background: color-mix(in srgb, var(--surface-panel) 90%, var(--surface-panel-strong) 10%);
 }
 
 .check-card.is-disabled {
@@ -628,7 +628,7 @@ function toggleOption(item) {
 
 .check-card.is-disabled:hover {
   transform: none;
-  border-color: color-mix(in srgb, var(--border-soft) 82%, rgba(255, 255, 255, 0.38));
+  border-color: color-mix(in srgb, var(--border-soft) 82%, var(--border-strong) 18%);
   box-shadow: none;
 }
 
@@ -660,7 +660,7 @@ function toggleOption(item) {
 }
 
 .check-card__mark.is-checked .check-card__tick {
-  border-color: #fff;
+  border-color: var(--text-on-primary);
 }
 
 .check-card__content {

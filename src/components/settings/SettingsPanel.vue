@@ -1,40 +1,41 @@
 <template>
   <div class="settings-page">
     <div class="settings-shell">
-      <section
-        v-for="group in settingGroups"
-        :key="group.key"
-        class="settings-group"
-      >
-        <el-card class="settings-card" shadow="never">
-          <div
-            v-for="item in group.items"
-            :key="item.key"
-            class="setting-row"
-            :class="{ 'is-danger': item.danger }"
-          >
-            <div class="setting-copy">
-              <h3 class="setting-title">{{ item.title }}</h3>
-              <p v-if="item.description" class="setting-description">
-                {{ item.description }}
-              </p>
-            </div>
+      <div class="settings-card">
+        <div
+          v-for="item in settingItems"
+          :key="item.key"
+          class="setting-row"
+          :class="{ 'is-danger': item.danger }"
+        >
+          <SmartIcon
+            class="setting-icon"
+            :name="item.icon"
+            :color="item.color"
+            :size="24"
+          />
 
-            <div class="setting-action">
-              <el-button
-                round
-                plain
-                class="setting-button"
-                :class="{ 'is-danger': item.danger }"
-                :loading="item.key === 'cache' && cleaningCache"
-                @click="item.action"
-              >
-                {{ item.actionText }}
-              </el-button>
-            </div>
+          <div class="setting-copy">
+            <h3 class="setting-title">{{ item.title }}</h3>
+            <p v-if="item.description" class="setting-description">
+              {{ item.description }}
+            </p>
           </div>
-        </el-card>
-      </section>
+
+          <div class="setting-action">
+            <el-button
+              round
+              plain
+              class="setting-button"
+              :class="{ 'is-danger': item.danger }"
+              :loading="item.key === 'cache' && cleaningCache"
+              @click="item.action"
+            >
+              {{ item.actionText }}
+            </el-button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -42,43 +43,40 @@
 <script setup>
 import { ref } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
+import SmartIcon from '@/components/common/SmartIcon.vue';
 import { useDeviceStore } from '@/utils/deviceStore';
 
 const cleaningCache = ref(false);
 const { stopPolling, startPolling } = useDeviceStore();
 
-const settingGroups = [
+const settingItems = [
   {
-    key: 'resource-folders',
-    items: [
-      {
-        key: 'driver-folder',
-        title: '查看 / 安装驱动',
-        description: '打开包含 ADB 与 Fastboot 驱动的本地文件夹',
-        actionText: '打开文件夹',
-        action: handleOpenDriverFolder,
-      },
-      {
-        key: 'dependency-folder',
-        title: '打开依赖包文件夹',
-        description: '查看当前程序依赖目录，包含 platform-tools、scrcpy-core、aria2-core 等组件',
-        actionText: '打开文件夹',
-        action: handleOpenToolDependencyFolder,
-      },
-    ],
+    key: 'driver-folder',
+    title: '查看 / 安装驱动',
+    description: '打开包含 ADB 与 Fastboot 驱动的本地文件夹',
+    actionText: '打开文件夹',
+    icon: 'tool',
+    color: '#705cff',
+    action: handleOpenDriverFolder,
   },
   {
-    key: 'tool-cache',
-    items: [
-      {
-        key: 'cache',
-        title: '工具缓存管理',
-        description: '清除运行缓存与临时资源，不会删除你手动保存的下载文件或导出内容',
-        actionText: '管理',
-        action: handleClearToolCache,
-        danger: true,
-      },
-    ],
+    key: 'dependency-folder',
+    title: '打开依赖包文件夹',
+    description: '查看当前程序依赖目录，包含 platform-tools、scrcpy-core、aria2-core 等组件',
+    actionText: '打开文件夹',
+    icon: 'folder',
+    color: '#8b5cf6',
+    action: handleOpenToolDependencyFolder,
+  },
+  {
+    key: 'cache',
+    title: '工具缓存管理',
+    description: '清除运行缓存与临时资源，不会删除你手动保存的下载文件或导出内容',
+    actionText: '管理',
+    icon: 'trash',
+    color: '#ff6b6b',
+    action: handleClearToolCache,
+    danger: true,
   },
 ];
 
@@ -148,126 +146,117 @@ defineExpose({ refresh: () => {} });
 .settings-shell {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.settings-group {
-  width: 100%;
 }
 
 .settings-card {
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+  border: 1px solid var(--border-soft);
+  border-radius: 18px;
+  background: transparent;
+  box-shadow: none;
   overflow: hidden;
-
-  :deep(.el-card__body) {
-    padding: 0;
-  }
 }
 
 .setting-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 14px;
-  min-height: 72px;
-  padding: 14px 18px;
+  min-height: 74px;
+  padding: 13px 22px;
+  background: transparent;
 
   & + .setting-row {
-    border-top: 1px solid rgba(15, 23, 42, 0.06);
+    border-top: 1px solid var(--color-divider);
   }
+}
+
+.setting-icon {
+  flex-shrink: 0;
+  border-radius: 14px;
 }
 
 .setting-copy {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
   min-width: 0;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .setting-title {
   margin: 0;
-  font-size: 16px;
-  line-height: 1.35;
-  font-weight: 500;
-  color: #161616;
+  font-size: 13px;
+  line-height: 1.3;
+  // font-weight: 700;
+  color: var(--color-text-primary);
   letter-spacing: -0.01em;
 }
 
 .setting-description {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: #8a8f98;
-  word-break: break-all;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+  word-break: break-word;
 }
 
 .setting-action {
+  display: flex;
   flex-shrink: 0;
+  justify-content: flex-end;
 }
 
 .setting-button {
-  min-width: 124px;
-  height: 38px;
-  padding: 0 18px;
+  min-width: 92px;
+  height: 30px;
+  padding: 0 14px;
   border-radius: 999px;
-  border-color: rgba(15, 23, 42, 0.16);
-  background: rgba(255, 255, 255, 0.9);
-  color: #2f3135;
-  font-size: 13px;
-  font-weight: 500;
+  border-color: var(--border-soft);
+  background: var(--surface-chip);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
   transition: all 0.2s ease;
 
   &:hover,
   &:focus-visible {
-    border-color: rgba(15, 23, 42, 0.28);
-    background: #fff;
-    color: #111827;
+    border-color: rgba(var(--color-primary-rgb), 0.38);
+    background: var(--surface-chip-hover);
+    color: var(--color-primary);
     transform: translateY(-1px);
   }
 
   &.is-danger {
-    border-color: rgba(220, 38, 38, 0.2);
-    color: #b42318;
+    border-color: rgba(var(--color-danger-rgb), 0.28);
+    background: var(--danger-soft);
+    color: var(--text-danger-strong);
 
     &:hover,
     &:focus-visible {
-      border-color: rgba(220, 38, 38, 0.36);
-      color: #912018;
-      background: rgba(255, 250, 250, 0.98);
+      border-color: rgba(var(--color-danger-rgb), 0.46);
+      background: var(--danger-soft);
+      color: var(--text-danger-strong);
     }
   }
 }
 
-.setting-row.is-danger .setting-title {
-  color: #171717;
-}
-
 @media (max-width: 768px) {
-  .settings-shell {
-    gap: 12px;
-  }
-
   .settings-card {
-    border-radius: 10px;
+    border-radius: 16px;
   }
 
   .setting-row {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
     min-height: auto;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-    padding: 14px;
+    padding: 13px 14px;
   }
 
   .setting-action {
-    width: 100%;
+    grid-column: 2;
+    justify-content: flex-start;
   }
 
   .setting-button {
-    width: 100%;
     min-width: 0;
   }
 }

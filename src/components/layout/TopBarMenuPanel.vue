@@ -47,10 +47,10 @@ defineEmits(['select']);
   width: 188px;
   padding: 10px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14);
-  backdrop-filter: blur(22px);
+  background: var(--surface-elevated-strong);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-card-hover);
+  backdrop-filter: var(--blur-glass);
   z-index: 40;
 }
 
@@ -60,9 +60,9 @@ defineEmits(['select']);
   right: 26px;
   width: 14px;
   height: 14px;
-  background: rgba(255, 255, 255, 0.96);
-  border-top: 1px solid rgba(226, 232, 240, 0.9);
-  border-left: 1px solid rgba(226, 232, 240, 0.9);
+  background: var(--surface-elevated-strong);
+  border-top: 1px solid var(--border-strong);
+  border-left: 1px solid var(--border-strong);
   transform: rotate(45deg);
 }
 

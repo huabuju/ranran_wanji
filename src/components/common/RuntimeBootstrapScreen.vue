@@ -213,10 +213,10 @@ const roundedProgress = computed(() => Math.round(props.progress));
   overflow: auto;
   padding: 0;
   background:
-    radial-gradient(circle at top left, rgba(14, 165, 233, 0.18), transparent 30%),
-    radial-gradient(circle at 85% 18%, rgba(59, 130, 246, 0.16), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(249, 115, 22, 0.16), transparent 28%),
-    linear-gradient(135deg, #f8fbff 0%, #eef4ff 46%, #f8fafc 100%);
+    radial-gradient(circle at top left, rgba(var(--color-info-rgb), 0.18), transparent 30%),
+    radial-gradient(circle at 85% 18%, var(--brand-blue-soft), transparent 24%),
+    radial-gradient(circle at bottom right, var(--brand-orange-soft), transparent 28%),
+    linear-gradient(135deg, var(--bg-app) 0%, var(--surface-panel) 46%, var(--bg-app) 100%);
 }
 
 .bootstrap-card {
@@ -258,8 +258,8 @@ const roundedProgress = computed(() => Math.round(props.progress));
   display: inline-flex;
   padding: 7px 14px;
   border-radius: 999px;
-  background: rgba(14, 165, 233, 0.12);
-  color: #0369a1;
+  background: var(--info-soft);
+  color: var(--color-info);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -271,13 +271,13 @@ const roundedProgress = computed(() => Math.round(props.progress));
   font-size: 22px;
   line-height: 1.12;
   letter-spacing: -0.03em;
-  color: #0f172a;
+  color: var(--color-text-primary);
 }
 
 .bootstrap-subtitle {
   max-width: 700px;
   margin: 0;
-  color: #334155;
+  color: var(--color-text-secondary);
   font-size: 18px;
   line-height: 1.9;
 }
@@ -293,11 +293,11 @@ const roundedProgress = computed(() => Math.round(props.progress));
   min-width: 0;
   padding: 18px 18px 16px;
   border-radius: 22px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.58) 100%);
-  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated));
+  border: 1px solid var(--border-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.66),
-    0 18px 40px rgba(15, 23, 42, 0.08);
+    inset 0 1px 0 var(--border-strong),
+    var(--shadow-card);
   backdrop-filter: blur(18px);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -309,7 +309,7 @@ const roundedProgress = computed(() => Math.round(props.progress));
 .bootstrap-highlight__label {
   display: inline-flex;
   margin-bottom: 12px;
-  color: #0284c7;
+  color: var(--color-info);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -318,14 +318,14 @@ const roundedProgress = computed(() => Math.round(props.progress));
 
 .bootstrap-highlight__title {
   display: block;
-  color: #0f172a;
+  color: var(--color-text-primary);
   font-size: 16px;
   line-height: 1.4;
 }
 
 .bootstrap-highlight__text {
   margin: 10px 0 0;
-  color: #516174;
+  color: var(--color-text-secondary);
   font-size: 13px;
   line-height: 1.8;
 }
@@ -335,7 +335,7 @@ const roundedProgress = computed(() => Math.round(props.progress));
   align-items: center;
   gap: 16px;
   margin-top: 28px;
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 14px;
   opacity: 0.9;
 }
@@ -363,17 +363,17 @@ const roundedProgress = computed(() => Math.round(props.progress));
   padding: 20px 34px 32px;
   border-radius: 20px;
   box-sizing: border-box;
-  // background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.78) 100%);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated));
+  border: 1px solid var(--border-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.82),
-    0 26px 72px rgba(15, 23, 42, 0.13);
+    inset 0 1px 0 var(--border-strong),
+    var(--shadow-card-hover);
   backdrop-filter: blur(26px);
 }
 
 .bootstrap-panel__eyebrow {
   margin: 0;
-  color: #0284c7;
+  color: var(--color-info);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -382,14 +382,14 @@ const roundedProgress = computed(() => Math.round(props.progress));
 
 .bootstrap-panel__title {
   margin: 16px 0;
-  color: #0f172a;
+  color: var(--color-text-primary);
   font-size: 22px;
   line-height: 1.22;
 }
 
 .bootstrap-text {
   margin: 0;
-  color: #475569;
+  color: var(--color-text-secondary);
   font-size: 15px;
   line-height: 1.8;
 }
@@ -398,14 +398,14 @@ const roundedProgress = computed(() => Math.round(props.progress));
   margin-top: 26px;
   height: 12px;
   border-radius: 999px;
-  background: rgba(148, 163, 184, 0.18);
+  background: var(--surface-chip);
   overflow: hidden;
 }
 
 .bootstrap-progress__bar {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #0ea5e9 0%, #3b82f6 54%, #f97316 100%);
+  background: linear-gradient(90deg, var(--color-info) 0%, var(--brand-blue-strong) 54%, var(--brand-orange) 100%);
   transition: width 0.25s ease;
 }
 
@@ -415,7 +415,7 @@ const roundedProgress = computed(() => Math.round(props.progress));
   justify-content: space-between;
   gap: 12px;
   font-size: 14px;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .bootstrap-stats {
@@ -428,16 +428,16 @@ const roundedProgress = computed(() => Math.round(props.progress));
 .bootstrap-stat {
   padding: 8px 10px 9px;
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(247, 250, 252, 0.9) 0%, rgba(243, 247, 251, 0.86) 100%);
-  border: 1px solid rgba(203, 213, 225, 0.72);
+  background: linear-gradient(180deg, var(--surface-panel-strong), var(--surface-panel));
+  border: 1px solid var(--border-soft);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    0 6px 14px rgba(148, 163, 184, 0.06);
+    inset 0 1px 0 var(--border-strong),
+    var(--shadow-sm);
 }
 
 .bootstrap-stat__label {
   display: block;
-  color: #7b8798;
+  color: var(--color-text-muted);
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -446,7 +446,7 @@ const roundedProgress = computed(() => Math.round(props.progress));
 .bootstrap-stat__value {
   display: block;
   margin-top: 6px;
-  color: #1f2937;
+  color: var(--color-text-primary);
   font-size: 12px;
   line-height: 1.25;
   font-weight: 700;
@@ -464,9 +464,9 @@ const roundedProgress = computed(() => Math.round(props.progress));
   align-items: flex-start;
   padding: 14px 16px;
   border-radius: 20px;
-  background: rgba(248, 250, 252, 0.78);
-  border: 1px solid rgba(226, 232, 240, 0.82);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84);
+  background: var(--surface-panel);
+  border: 1px solid var(--border-soft);
+  box-shadow: inset 0 1px 0 var(--border-strong);
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
@@ -475,20 +475,20 @@ const roundedProgress = computed(() => Math.round(props.progress));
 }
 
 .bootstrap-step.is-active {
-  background: rgba(239, 246, 255, 0.96);
-  border-color: rgba(56, 189, 248, 0.42);
-  box-shadow: 0 14px 32px rgba(14, 165, 233, 0.12);
+  background: var(--info-soft);
+  border-color: rgba(var(--color-info-rgb), 0.32);
+  box-shadow: 0 14px 32px rgba(var(--color-info-rgb), 0.12);
   transform: translateY(-1px);
 }
 
 .bootstrap-step.is-done {
-  background: rgba(240, 253, 244, 0.88);
-  border-color: rgba(74, 222, 128, 0.34);
+  background: var(--success-soft);
+  border-color: rgba(var(--color-success-rgb), 0.3);
 }
 
 .bootstrap-step.is-error {
-  background: rgba(254, 242, 242, 0.92);
-  border-color: rgba(248, 113, 113, 0.36);
+  background: var(--danger-soft);
+  border-color: rgba(var(--color-danger-rgb), 0.3);
 }
 
 .bootstrap-step__index {
@@ -499,25 +499,25 @@ const roundedProgress = computed(() => Math.round(props.progress));
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(226, 232, 240, 0.9);
-  color: #475569;
+  background: var(--surface-chip);
+  color: var(--color-text-secondary);
   font-size: 13px;
   font-weight: 700;
 }
 
 .bootstrap-step.is-active .bootstrap-step__index {
-  background: linear-gradient(135deg, #0ea5e9, #3b82f6);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-info), var(--brand-blue-strong));
+  color: var(--text-on-primary);
 }
 
 .bootstrap-step.is-done .bootstrap-step__index {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-success), var(--brand-success-strong));
+  color: var(--text-on-primary);
 }
 
 .bootstrap-step.is-error .bootstrap-step__index {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-danger), var(--brand-rose));
+  color: var(--text-on-primary);
 }
 
 .bootstrap-step__body {
@@ -528,13 +528,13 @@ const roundedProgress = computed(() => Math.round(props.progress));
 }
 
 .bootstrap-step__title {
-  color: #0f172a;
+  color: var(--color-text-primary);
   font-size: 14px;
   line-height: 1.35;
 }
 
 .bootstrap-step__text {
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 12px;
   line-height: 1.6;
 }

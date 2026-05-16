@@ -73,7 +73,7 @@ const getCommandVars = (option) => ({
   @include overview-interactive-panel(
     18px,
     color-mix(in srgb, var(--color-border) 75%, transparent),
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 92%, white 8%), color-mix(in srgb, var(--surface-strong) 90%, transparent)),
+    linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated)),
     radial-gradient(circle at top left, color-mix(in srgb, var(--command-accent) 20%, transparent), transparent 70%),
     (transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease)
   );
@@ -83,7 +83,7 @@ const getCommandVars = (option) => ({
 
 .command-card:hover:not(.is-disabled) {
   transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--command-accent) 45%, white 20%);
+  border-color: color-mix(in srgb, var(--command-accent) 45%, var(--border-strong) 20%);
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12), 0 4px 10px color-mix(in srgb, var(--command-accent) 20%, transparent);
 }
 

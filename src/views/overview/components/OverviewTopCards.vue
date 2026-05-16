@@ -76,7 +76,7 @@ const getStatCardVars = (card) => ({
     20px,
     color-mix(in srgb, var(--color-border) 75%, transparent),
     radial-gradient(circle at top left, color-mix(in srgb, var(--stat-accent-color) 20%, transparent), transparent 70%),
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 92%, white 8%), color-mix(in srgb, var(--surface-strong) 90%, transparent))
+    linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated))
   );
 }
 

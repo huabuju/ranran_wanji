@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Skill(andrej-karpathy-skills:karpathy-guidelines)",
-      "Skill(andrej-karpathy-skills:karpathy-guidelines:*)"
+      "Skill(andrej-karpathy-skills:karpathy-guidelines:*)",
+      "Bash(yarn build *)",
+      "Bash(yarn dev *)"
     ]
   }
 }

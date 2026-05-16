@@ -100,19 +100,19 @@ defineEmits(['wireless-adb']);
 }
 
 .hardware-showcase {
-  --hardware-panel-border: color-mix(in srgb, var(--color-border) 88%, rgba(255, 255, 255, 0.08));
+  --hardware-panel-border: color-mix(in srgb, var(--color-border) 88%, var(--border-soft));
   --hardware-panel-surface:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--surface-elevated-strong) 88%, rgba(255, 255, 255, 0.08)),
-      color-mix(in srgb, var(--surface-panel) 96%, transparent)
+      var(--surface-elevated-strong),
+      var(--surface-panel)
     );
   --hardware-panel-accent: radial-gradient(circle at left top, rgba(var(--color-primary-rgb), 0.12), transparent 54%);
   --hardware-panel-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 var(--border-soft),
     0 12px 28px rgba(15, 23, 42, 0.08);
   --hardware-panel-hover-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 var(--border-strong),
     0 18px 38px rgba(15, 23, 42, 0.14);
   padding: 15px;
   display: flex;
@@ -124,7 +124,7 @@ defineEmits(['wireless-adb']);
   background:
     radial-gradient(circle at top left, rgba(var(--color-primary-rgb), 0.12), transparent 34%),
     radial-gradient(circle at 88% 12%, rgba(var(--color-info-rgb), 0.12), transparent 30%),
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 94%, white 6%), color-mix(in srgb, var(--surface-strong) 92%, transparent));
+    linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated));
 }
 
 .hardware-hero {
@@ -150,25 +150,25 @@ defineEmits(['wireless-adb']);
   min-width: 92px;
   height: 42px;
   padding: 0 18px;
-  border: none;
+  border: 1px solid rgba(var(--color-success-rgb), 0.24);
   border-radius: 12px;
-  background: linear-gradient(180deg, #e8fbf3 0%, #dbf8ee 100%);
-  color: #13b88e;
+  background: linear-gradient(180deg, var(--success-soft), color-mix(in srgb, var(--success-soft) 62%, var(--surface-elevated-strong)));
+  color: var(--color-success);
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.01em;
   cursor: pointer;
   box-shadow:
-    0 10px 24px rgba(19, 184, 142, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    0 10px 24px rgba(var(--color-success-rgb), 0.14),
+    inset 0 1px 0 var(--border-strong);
   transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 
   &:hover {
     transform: translateY(-1px);
     box-shadow:
-      0 14px 28px rgba(19, 184, 142, 0.18),
-      inset 0 1px 0 rgba(255, 255, 255, 0.82);
-    filter: saturate(1.02);
+      0 14px 28px rgba(var(--color-success-rgb), 0.18),
+      inset 0 1px 0 var(--border-strong);
+    filter: saturate(1.04);
   }
 }
 
@@ -490,17 +490,17 @@ defineEmits(['wireless-adb']);
   --hardware-panel-surface:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.08),
-      rgba(15, 23, 42, 0.7)
+      var(--surface-panel-strong),
+      var(--surface-panel)
     );
   --hardware-panel-accent:
     radial-gradient(circle at left top, rgba(var(--color-primary-rgb), 0.16), transparent 52%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 55%);
+    linear-gradient(135deg, color-mix(in srgb, var(--surface-panel-strong) 28%, transparent), transparent 55%);
   --hardware-panel-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 var(--border-soft),
     0 14px 32px rgba(2, 6, 23, 0.26);
   --hardware-panel-hover-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 var(--border-strong),
     0 20px 40px rgba(2, 6, 23, 0.34);
 }
 </style>

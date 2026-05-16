@@ -103,7 +103,7 @@ const getResourceMetricVars = (metric) => ({
   @include overview-interactive-panel(
     20px,
     color-mix(in srgb, var(--color-border) 75%, transparent),
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 92%, white 8%), color-mix(in srgb, var(--surface-strong) 90%, transparent)),
+    linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated)),
     radial-gradient(circle at top, var(--resource-accent-soft), transparent 55%),
     (transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease),
     true,
@@ -171,7 +171,7 @@ const getResourceMetricVars = (metric) => ({
 
 .resource-battery-card {
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 92%, white 8%), color-mix(in srgb, var(--surface-strong) 90%, transparent)),
+    linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated)),
     radial-gradient(circle at top, color-mix(in srgb, var(--resource-accent-soft) 100%, transparent), transparent 55%);
 }
 

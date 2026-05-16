@@ -25,8 +25,8 @@
 
 @mixin overview-soft-panel(
   $radius: 18px,
-  $borderColor: color-mix(in srgb, var(--color-border) 72%, white 14%),
-  $surface: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.44)),
+  $borderColor: color-mix(in srgb, var(--color-border) 72%, transparent),
+  $surface: linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated)),
   $accent: null
 ) {
   border-radius: $radius;
@@ -40,8 +40,8 @@
 
 @mixin overview-interactive-panel(
   $radius: 18px,
-  $borderColor: color-mix(in srgb, var(--color-border) 72%, white 14%),
-  $surface: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.44)),
+  $borderColor: color-mix(in srgb, var(--color-border) 72%, transparent),
+  $surface: linear-gradient(180deg, var(--surface-elevated-strong), var(--surface-elevated)),
   $accent: null,
   $transition: (transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease),
   $positioned: false,

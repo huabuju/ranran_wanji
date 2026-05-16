@@ -194,6 +194,8 @@ async function handleMenuSelect(item) {
 
 <style lang="scss" scoped>
 .top-bar {
+  padding-right: 8px;
+  box-sizing: border-box;
   --topbar-height: 44px;
   position: relative;
   height: var(--topbar-height);
@@ -202,11 +204,11 @@ async function handleMenuSelect(item) {
   justify-content: flex-end;
   gap: 20px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.82)),
-    radial-gradient(circle at top left, rgba(96, 165, 250, 0.08), transparent 32%);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.86);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+    linear-gradient(180deg, var(--bg-header), var(--surface-elevated)),
+    radial-gradient(circle at top left, rgba(var(--color-primary-rgb), 0.08), transparent 32%);
+  border-bottom: 1px solid var(--border-soft);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
   flex-shrink: 0;
   z-index: 30;
   user-select: none;
@@ -252,7 +254,7 @@ async function handleMenuSelect(item) {
 .icon-button:hover,
 .icon-button.is-active,
 .window-button:hover {
-  background: rgba(15, 23, 42, 0.05);
+  background: var(--bg-hover-subtle);
   color: var(--color-text-primary);
 }
 
@@ -279,19 +281,30 @@ async function handleMenuSelect(item) {
 }
 
 .menu-lines {
+  position: relative;
   width: 16px;
   height: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 3px;
+  display: block;
 
   span {
-    display: block;
-    width: 100%;
-    height: 1.5px;
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    height: 2px;
     border-radius: 999px;
     background: currentColor;
+  }
+
+  span:nth-child(1) {
+    top: 3px;
+  }
+
+  span:nth-child(2) {
+    top: 7px;
+  }
+
+  span:nth-child(3) {
+    top: 11px;
   }
 }
 
@@ -342,7 +355,7 @@ async function handleMenuSelect(item) {
 }
 
 .top-bar.is-focused {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 var(--border-strong);
 }
 
 @media (max-width: 960px) {

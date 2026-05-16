@@ -134,7 +134,7 @@ body {
 
 .el-dialog.app-dialog-shell .el-dialog__header {
   margin: 0;
-  padding: 18px 24px 8px;
+  padding: 8px;
   text-align: center;
   border-bottom: none;
 }
@@ -196,10 +196,22 @@ body {
 
 .el-select-dropdown,
 .el-dropdown__popper,
-.el-popper.is-light {
+.el-popper.is-light,
+.el-popover.el-popper {
   background: var(--surface-elevated-strong) !important;
   border: 1px solid var(--border-strong) !important;
   box-shadow: var(--shadow-card) !important;
+  color: var(--color-text-secondary) !important;
+}
+
+.el-popper.is-light .el-popper__arrow::before {
+  background: var(--surface-elevated-strong) !important;
+  border-color: var(--border-strong) !important;
+}
+
+.el-dropdown-menu {
+  background: transparent !important;
+  border: none !important;
 }
 
 .el-select-dropdown__item,
@@ -209,7 +221,8 @@ body {
 
 .el-select-dropdown__item.hover,
 .el-select-dropdown__item:hover,
-.el-dropdown-menu__item:hover {
+.el-dropdown-menu__item:hover,
+.el-dropdown-menu__item:focus {
   background: var(--surface-soft) !important;
   color: var(--color-text-primary) !important;
 }

@@ -508,7 +508,7 @@ function handleToolChange(value) {
   padding: 8px 14px;
   border-radius: 20px;
   background: var(--surface-panel);
-  border: 1px solid color-mix(in srgb, var(--border-soft) 82%, rgba(255, 255, 255, 0.34));
+  border: 1px solid var(--border-soft);
   transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
 }
 
@@ -747,7 +747,7 @@ function handleToolChange(value) {
   margin-top: 12px;
   padding: 12px 14px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.44);
+  background: var(--surface-soft);
   border: 1px dashed rgba(var(--color-primary-rgb), 0.16);
 }
 
@@ -861,7 +861,7 @@ function handleToolChange(value) {
 :deep(.field-select .el-select__wrapper) {
   min-height: 38px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--surface-elevated);
   box-shadow:
     inset 0 0 0 1px rgba(var(--color-primary-rgb), 0.08),
     0 10px 24px -18px rgba(15, 23, 42, 0.18) !important;
@@ -872,7 +872,7 @@ function handleToolChange(value) {
 :deep(.field-input .el-input__wrapper.is-focus),
 :deep(.field-select .el-select__wrapper:hover),
 :deep(.field-select .el-select__wrapper.is-focused) {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--surface-elevated-strong);
   box-shadow:
     inset 0 0 0 1px rgba(var(--color-primary-rgb), 0.2),
     0 12px 28px -20px rgba(var(--color-primary-rgb), 0.32) !important;
@@ -893,8 +893,8 @@ function handleToolChange(value) {
   padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid rgba(var(--color-warning-rgb), 0.18);
-  background: rgba(255, 252, 245, 0.98) !important;
-  box-shadow: 0 18px 36px -24px rgba(15, 23, 42, 0.32);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--warning-soft) 36%, var(--surface-elevated-strong)), var(--surface-elevated)) !important;
+  box-shadow: var(--shadow-card);
 }
 
 :deep(.boot-source-warning-tooltip .boot-source-warning-tooltip__content) {

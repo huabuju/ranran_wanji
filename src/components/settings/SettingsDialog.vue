@@ -2,8 +2,8 @@
   <el-dialog
     v-model="visible"
     title="系统设置"
-    width="760px"
-    top="7vh"
+    width="620px"
+    align-center
     class="app-dialog-shell settings-dialog"
     :close-on-click-modal="true"
     append-to-body
@@ -30,10 +30,8 @@ defineExpose({ open });
 
 <style lang="scss" scoped>
 .settings-dialog {
-  --app-dialog-radius: 6px;
-
   :deep(.el-dialog__header) {
-    padding: 20px 24px 12px;
+    // padding: 20px 24px 10px;
   }
 
   :deep(.el-dialog__title) {
@@ -50,6 +48,6 @@ defineExpose({ open });
 .settings-dialog-body {
   max-height: 72vh;
   overflow: auto;
-  padding: 2px 2px 0;
+  padding: 0;
 }
 </style>
