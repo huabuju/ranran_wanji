@@ -53,7 +53,7 @@ const routes = [
     path: "/github-apk",
     name: "GitHubApk",
     component: () => import("@/views/github-apk/index.vue"),
-    meta: { title: "GitHub APK", icon: "github", color: "#111827" },
+    meta: { title: "GitHub APK", icon: "github", color: "#94a3b8" },
   },
   {
     path: "/boot-patch",

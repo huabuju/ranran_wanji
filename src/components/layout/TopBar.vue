@@ -1,12 +1,18 @@
 <template>
   <header
     class="top-bar"
-    :class="{ 'is-focused': isWindowFocused }"
+    :class="{ 'is-focused': isWindowFocused, 'is-busy': isClosing }"
     @mousedown.left="handleTitlebarMouseDown"
     @dblclick="handleTitlebarDoubleClick"
   >
     <div class="top-bar-right no-window-drag">
-      <button class="icon-button no-window-drag" type="button" aria-label="使用说明" @click="emit('usage-guide')">
+      <button
+        class="icon-button no-window-drag"
+        type="button"
+        aria-label="使用说明"
+        :disabled="isClosing"
+        @click="emit('usage-guide')"
+      >
         <span class="icon-slot" aria-hidden="true">
           <SmartIcon
             name="notification"
@@ -24,6 +30,7 @@
           :class="{ 'is-active': showMenu }"
           type="button"
           aria-label="菜单"
+          :disabled="isClosing"
           @click.stop="toggleMenu"
         >
           <span class="icon-slot" aria-hidden="true">
@@ -43,12 +50,24 @@
       </div>
 
       <div class="window-actions no-window-drag">
-        <button class="window-button is-minimize no-window-drag" type="button" aria-label="最小化" @click="handleWindowMinimize">
+        <button
+          class="window-button is-minimize no-window-drag"
+          type="button"
+          aria-label="最小化"
+          :disabled="isClosing"
+          @click="handleWindowMinimize"
+        >
           <span class="icon-slot" aria-hidden="true">
             <span class="window-glyph window-glyph--minimize"></span>
           </span>
         </button>
-        <button class="window-button is-close no-window-drag" type="button" aria-label="关闭" @click="handleWindowClose">
+        <button
+          class="window-button is-close no-window-drag"
+          type="button"
+          aria-label="关闭"
+          :disabled="isClosing"
+          @click="handleWindowClose"
+        >
           <span class="icon-slot" aria-hidden="true">
             <span class="window-glyph window-glyph--close"></span>
           </span>
@@ -64,6 +83,13 @@ import { getCurrentWindow } from '@tauri-apps/api/window';
 import SmartIcon from '@/components/common/SmartIcon.vue';
 import TopBarMenuPanel from '@/components/layout/TopBarMenuPanel.vue';
 import { restartApplication } from '@/api/device';
+
+const props = defineProps({
+  isClosing: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const emit = defineEmits(['refresh', 'open-settings', 'usage-guide']);
 const appWindow = getCurrentWindow();
@@ -133,22 +159,43 @@ async function syncWindowState() {
 }
 
 function toggleMenu() {
+  if (props.isClosing) {
+    return;
+  }
+
   showMenu.value = !showMenu.value;
 }
 
 async function handleWindowMinimize() {
+  if (props.isClosing) {
+    return;
+  }
+
   await appWindow.minimize();
 }
 
 async function handleWindowClose() {
+  if (props.isClosing) {
+    return;
+  }
+
+  showMenu.value = false;
   await appWindow.close();
 }
 
 async function startWindowDragging() {
+  if (props.isClosing) {
+    return;
+  }
+
   await appWindow.startDragging();
 }
 
 async function toggleWindowMaximize() {
+  if (props.isClosing) {
+    return;
+  }
+
   await appWindow.toggleMaximize();
   isMaximized.value = await appWindow.isMaximized();
 }
@@ -174,6 +221,10 @@ function handleTitlebarDoubleClick(event) {
 }
 
 async function handleMenuSelect(item) {
+  if (props.isClosing) {
+    return;
+  }
+
   showMenu.value = false;
 
   if (item.key === 'refresh-page') {
@@ -246,7 +297,7 @@ async function handleMenuSelect(item) {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.14s ease, color 0.14s ease;
+  transition: background-color 0.14s ease, color 0.14s ease, opacity 0.14s ease;
   flex-shrink: 0;
   color: var(--color-text-secondary);
 }
@@ -256,6 +307,12 @@ async function handleMenuSelect(item) {
 .window-button:hover {
   background: var(--bg-hover-subtle);
   color: var(--color-text-primary);
+}
+
+.icon-button:disabled,
+.window-button:disabled {
+  cursor: wait;
+  opacity: 0.58;
 }
 
 .icon-slot {
@@ -356,6 +413,10 @@ async function handleMenuSelect(item) {
 
 .top-bar.is-focused {
   box-shadow: inset 0 1px 0 var(--border-strong);
+}
+
+.top-bar.is-busy {
+  pointer-events: none;
 }
 
 @media (max-width: 960px) {

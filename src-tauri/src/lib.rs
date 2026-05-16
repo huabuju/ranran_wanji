@@ -44,7 +44,7 @@ use commands::xfu::{fetch_xfu_catalog, fetch_xfu_model_roms};
 use commands::xiaomirom::{
     fetch_xiaomirom_catalog, fetch_xiaomirom_model_roms, resolve_xiaomirom_download_urls,
 };
-use tauri::Manager;
+use tauri::{Emitter, Manager};
 use utils::process::init_process_tracker;
 
 #[cfg(windows)]
@@ -195,8 +195,22 @@ pub fn run() {
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
-        .run(|app_handle, event| {
-            if let tauri::RunEvent::ExitRequested { .. } = event {
+        .run(|app_handle, event| match event {
+            tauri::RunEvent::WindowEvent {
+                label,
+                event: tauri::WindowEvent::CloseRequested { api, .. },
+                ..
+            } if label == "main" => {
+                api.prevent_close();
+                let _ = app_handle.emit("app-closing", ());
+
+                let app_handle = app_handle.clone();
+                tauri::async_runtime::spawn(async move {
+                    tokio::time::sleep(std::time::Duration::from_millis(120)).await;
+                    app_handle.exit(0);
+                });
+            }
+            tauri::RunEvent::ExitRequested { .. } => {
                 let exit_cleanup_state = app_handle.state::<ExitCleanupState>();
                 if exit_cleanup_state
                     .skip_cleanup_on_exit
@@ -212,5 +226,6 @@ pub fn run() {
                 let manager = app_handle.state::<Arc<commands::downloader::DownloadManager>>();
                 commands::downloader::cleanup_on_exit(&manager);
             }
+            _ => {}
         });
 }

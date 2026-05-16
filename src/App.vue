@@ -14,6 +14,7 @@
 
     <div class="main-area">
       <TopBar
+        :is-closing="isAppClosing"
         @refresh="handleRefresh"
         @open-settings="openSettingsDialog"
         @usage-guide="openUsageGuide"
@@ -31,6 +32,11 @@
     </div>
     <UpdateDialog />
     <CheckUpdateLoading />
+    <GlassLoading
+      :show="isAppClosing"
+      title="正在退出工具..."
+      description="正在清理运行中工具进程，请稍候。"
+    />
     <OverviewUsageGuideDialog ref="usageGuideDialogRef" />
     <SettingsDialog ref="settingsDialogRef" />
   </div>
@@ -41,6 +47,7 @@ import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import { useRoute } from 'vue-router';
+import GlassLoading from '@/components/common/GlassLoading.vue';
 import RuntimeBootstrapScreen from '@/components/common/RuntimeBootstrapScreen.vue';
 import UpdateDialog from '@/components/common/UpdateDialog.vue';
 import CheckUpdateLoading from '@/components/common/CheckUpdateLoading.vue';
@@ -61,10 +68,12 @@ const runtimeMessage = ref('正在检查运行时依赖...');
 const runtimeProgress = ref(0);
 const runtimeError = ref('');
 const runtimePhase = ref('check');
+const isAppClosing = ref(false);
 const route = useRoute();
 const { selectedSerial } = useDeviceStore();
 const OVERVIEW_USAGE_GUIDE_SHOWN_KEY = 'overview_usage_guide_shown';
 let unlistenRuntimeProgress = null;
+let unlistenAppClosing = null;
 const runtimeSourceLabels = {
   dev: '开发环境本地 bin',
   bundle: '安装包内置资源',
@@ -97,6 +106,10 @@ onMounted(async () => {
     runtimeProgress.value = Number(payload.progress || 0);
   });
 
+  unlistenAppClosing = await listen('app-closing', () => {
+    isAppClosing.value = true;
+  });
+
   await ensureRuntimeReady();
 });
 
@@ -104,6 +117,11 @@ onBeforeUnmount(() => {
   if (typeof unlistenRuntimeProgress === 'function') {
     unlistenRuntimeProgress();
     unlistenRuntimeProgress = null;
+  }
+
+  if (typeof unlistenAppClosing === 'function') {
+    unlistenAppClosing();
+    unlistenAppClosing = null;
   }
 });
 
@@ -115,7 +133,6 @@ async function ensureRuntimeReady() {
   try {
     const result = await invoke('prepare_runtime_assets');
     const sourceLabel = runtimeSourceLabels[result.source] || result.source || '未知来源';
-    runtimeMessage.value = `运行时依赖已就绪，来源：${result.source}`;
     runtimeMessage.value = `运行时依赖已就绪，来源：${sourceLabel}`;
     runtimeProgress.value = 100;
     runtimePhase.value = 'ready';
@@ -135,7 +152,7 @@ async function ensureRuntimeReady() {
     runtimeReady.value = true;
   } catch (error) {
     runtimeError.value = error?.toString?.() || '运行时依赖初始化失败';
-    runtimeMessage.value = '运行时依赖准备失败，请确认安装包中的 bin 资源完整后重试';
+    runtimeMessage.value = '运行时依赖准备失败，请确认安装包中的 bin 资源完整后重试。';
   } finally {
     runtimePreparing.value = false;
   }
@@ -145,7 +162,7 @@ async function handleRefresh() {
   await nextTick();
 
   if (!activeComponentRef.value) {
-    ElMessage.warning('当前页面还在加载中，请稍后再试');
+    ElMessage.warning('当前页面还在加载中，请稍后再试。');
     return;
   }
 
