@@ -14,7 +14,7 @@
       <span class="version">v{{ version }}</span>
       <template v-if="buildTime">
         <span class="divider">•</span>
-        <span class="build-time">打包于 {{ buildTime }}</span>
+        <span class="build-time">构建于 {{ buildTime }}</span>
       </template>
       <span class="divider">•</span>
       <span class="description">{{ description }}</span>

@@ -5,7 +5,7 @@ const routes = [
     path: "/",
     name: "DeviceOverview",
     component: () => import("@/views/overview/index.vue"),
-    meta: { title: "仪表概览", icon: "overview", color: "#3b82f6" },
+    meta: { title: "设备信息", icon: "overview", color: "#3b82f6" },
   },
   {
     path: "/device-control",

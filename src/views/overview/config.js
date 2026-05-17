@@ -20,45 +20,68 @@ export const OVERVIEW_FIELD_DEFINITIONS = {
   build_version: { label: '编译版本', fallback: '--' },
   fingerprint: { label: '设备指纹', fallback: '--' },
   kernel_version: { label: '内核版本', fallback: '--' },
+  manufacturer: { label: '制造商', fallback: '--' },
+  product_model: { label: '产品型号', fallback: '--' },
+  product_name: { label: '产品名称', fallback: '--' },
+  security_patch: { label: '安全补丁', fallback: '--' },
+  vendor_security_patch: { label: '厂商安全补丁', fallback: '--' },
+  build_incremental: { label: '增量版本', fallback: '--' },
+  build_type: { label: '构建类型', fallback: '--' },
+  build_tags: { label: '构建标签', fallback: '--' },
+  baseband_version: { label: '基带版本', fallback: '--' },
+  soc_manufacturer: { label: 'SoC 厂商', fallback: '--' },
+  soc_model: { label: 'SoC 型号', fallback: '--' },
+  cpu_abilist: { label: 'CPU ABI 列表', fallback: '--' },
 };
 
-export const OVERVIEW_SECTION_CONFIG = {
-  topInfoCards: [
-    { key: 'device_name', icon: 'device', color: 'var(--brand-blue)', bgColor: 'var(--brand-blue-soft)' },
-    { key: 'device_codename', icon: 'cpu', color: 'var(--color-success)', bgColor: 'var(--success-soft)' },
-    { key: 'serial', icon: 'serial', color: 'var(--brand-primary-strong)', bgColor: 'var(--color-primary-light)' },
-    { key: 'state', icon: 'power', color: 'var(--color-warning)', bgColor: 'var(--warning-soft)' },
-    { key: 'android_version', icon: 'android', color: 'var(--color-success)', bgColor: 'var(--success-soft)' },
-    { key: 'ab_slot', icon: 'system', color: 'var(--status-recovery)', bgColor: 'var(--brand-purple-soft)', label: '当前槽位' },
-  ],
-  appCards: [
-    { key: 'system_count', label: '系统应用', icon: 'package', color: 'var(--color-warning)', bgColor: 'var(--warning-soft)' },
-    { key: 'user_count', label: '用户应用', icon: 'user', color: 'var(--color-info)', bgColor: 'var(--info-soft)' },
-  ],
-  heroHighlights: [
-    { key: 'brand' },
-    { key: 'os_version', label: '系统' },
-    { key: 'kernel_version' },
-  ],
-  extraPanels: [
-    {
-      key: 'fingerprint',
-      icon: 'serial',
-      title: '设备指纹 (Fingerprint)',
-      subtitle: '用于快速识别当前设备构建来源与系统指纹',
-    },
-    {
-      key: 'uptime',
-      icon: 'time',
-      title: '系统运行时长 (Uptime)',
-      subtitle: '记录设备连续开机运行时间',
-    },
-  ],
-  hardwareColumns: [
-    ['unlock_state', 'cpu_codename', 'cpu_arch', 'hardware_platform', 'board_id'],
-    ['resolution', 'display_density', 'vndk_version', 'build_date', 'build_version'],
-  ],
+export const OVERVIEW_REPORT_FIELD_DEFINITIONS = {
+  ...OVERVIEW_FIELD_DEFINITIONS,
+  system_count: { label: '系统应用', fallback: '--' },
+  user_count: { label: '用户应用', fallback: '--' },
+  total_count: { label: '应用总数', fallback: '--' },
 };
+
+export const OVERVIEW_SUMMARY_FIELDS = [
+  'device_name',
+  'device_codename',
+  'brand',
+  'serial',
+  'resolution',
+  'unlock_state',
+  'os_version',
+  'build_version',
+];
+
+export const OVERVIEW_REPORT_FIELDS = [
+  'state',
+  'android_version',
+  'manufacturer',
+  'product_model',
+  'product_name',
+  'build_date',
+  'security_patch',
+  'vendor_security_patch',
+  'build_incremental',
+  'build_type',
+  'build_tags',
+  'fingerprint',
+  'kernel_version',
+  'vndk_version',
+  'cpu_codename',
+  'cpu_arch',
+  'cpu_abilist',
+  'soc_manufacturer',
+  'soc_model',
+  'hardware_platform',
+  'board_id',
+  'display_density',
+  'ab_slot',
+  'uptime',
+  'baseband_version',
+  'system_count',
+  'user_count',
+  'total_count',
+];
 
 export function createDefaultOverviewDeviceInfo() {
   return Object.fromEntries(

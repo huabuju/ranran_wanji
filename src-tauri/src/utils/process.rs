@@ -382,9 +382,16 @@ fn query_process_image_path_from_handle(handle: HANDLE) -> Option<PathBuf> {
 
 #[cfg(target_os = "windows")]
 fn normalize_windows_path(path: &Path) -> String {
-    path.to_string_lossy()
+    let normalized = path
+        .to_string_lossy()
         .replace('/', "\\")
-        .to_ascii_lowercase()
+        .to_ascii_lowercase();
+
+    normalized
+        .strip_prefix(r"\\?\")
+        .or_else(|| normalized.strip_prefix(r"\??\"))
+        .unwrap_or(&normalized)
+        .to_string()
 }
 
 #[cfg(target_os = "windows")]

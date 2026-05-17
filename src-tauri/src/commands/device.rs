@@ -165,6 +165,18 @@ pub async fn get_device_info(
             build_version: prop(&fb_props, "version-bootloader").to_string(),
             fingerprint: "--".to_string(),
             kernel_version: "--".to_string(),
+            manufacturer: "--".to_string(),
+            product_model: "--".to_string(),
+            product_name: prop(&fb_props, "product").to_string(),
+            security_patch: "--".to_string(),
+            vendor_security_patch: "--".to_string(),
+            build_incremental: "--".to_string(),
+            build_type: "--".to_string(),
+            build_tags: "--".to_string(),
+            baseband_version: "--".to_string(),
+            soc_manufacturer: "--".to_string(),
+            soc_model: "--".to_string(),
+            cpu_abilist: "--".to_string(),
         });
     }
 
@@ -252,6 +264,18 @@ pub async fn get_device_info(
         build_version: prop(&props, "ro.build.display.id").to_string(),
         fingerprint: prop(&props, "ro.build.fingerprint").to_string(),
         kernel_version: kernel.trim().to_string(),
+        manufacturer: prop(&props, "ro.product.manufacturer").to_string(),
+        product_model: prop(&props, "ro.product.model").to_string(),
+        product_name: prop(&props, "ro.product.name").to_string(),
+        security_patch: prop(&props, "ro.build.version.security_patch").to_string(),
+        vendor_security_patch: prop(&props, "ro.vendor.build.security_patch").to_string(),
+        build_incremental: prop(&props, "ro.build.version.incremental").to_string(),
+        build_type: prop(&props, "ro.build.type").to_string(),
+        build_tags: prop(&props, "ro.build.tags").to_string(),
+        baseband_version: prop(&props, "gsm.version.baseband").to_string(),
+        soc_manufacturer: prop(&props, "ro.soc.manufacturer").to_string(),
+        soc_model: prop(&props, "ro.soc.model").to_string(),
+        cpu_abilist: prop(&props, "ro.product.cpu.abilist").to_string(),
     })
 }
 

@@ -44,6 +44,18 @@ pub struct DeviceBasicInfo {
     pub build_version: String,
     pub fingerprint: String,
     pub kernel_version: String,
+    pub manufacturer: String,
+    pub product_model: String,
+    pub product_name: String,
+    pub security_patch: String,
+    pub vendor_security_patch: String,
+    pub build_incremental: String,
+    pub build_type: String,
+    pub build_tags: String,
+    pub baseband_version: String,
+    pub soc_manufacturer: String,
+    pub soc_model: String,
+    pub cpu_abilist: String,
 }
 
 #[derive(Serialize)]

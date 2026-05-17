@@ -1,39 +1,19 @@
 <template>
   <div class="page-container no-scrollbar">
-    <OverviewHardwareShowcase
-      :loading="loadingInfo"
-      :title="hardwareHeroTitle"
-      :description="hardwareHeroDescription"
-      :highlights="hardwareHighlights"
-      :columns="hardwareColumns"
+    <OverviewSummaryPanel
+      class="overview-summary-panel"
+      :loading="loadingInfo || loadingApp || loadingRes"
+      :resource-metrics="summaryResourceMetrics"
+      :base-items="summaryBaseItems"
+      :command-options="rebootOptions"
+      :is-connected="isConnected"
+      @reboot="handleReboot"
       @wireless-adb="openWirelessAdb"
     />
 
-    <OverviewTopCards
-      :cards="topCards"
-      :loading-info="loadingInfo"
-      :loading-app="loadingApp"
-    />
-
-    <div class="resource-row">
-      <OverviewExtraInfo
-        :cards="extraInfoCards"
-        :loading="loadingInfo"
-      />
-
-      <OverviewResourcePanel
-        :metrics="sideResourceMetrics"
-        :battery-metric="batteryMetric"
-        :battery-status-text="batteryStatusText"
-        :battery-temp="resources.battery_temp"
-        :loading="loadingRes"
-      />
-    </div>
-
-    <OverviewCommandGrid
-      :options="rebootOptions"
-      :is-connected="isConnected"
-      @reboot="handleReboot"
+    <OverviewInspectionReport
+      :loading="loadingInfo || loadingApp"
+      :items="reportItems"
     />
 
     <WirelessAdbDialog
@@ -51,22 +31,19 @@ import WirelessAdbDialog from '@/components/common/WirelessAdbDialog.vue';
 import { fetchDeviceInfo, fetchAppStatus, fetchDeviceResources, deviceReboot } from '@/api/device';
 import { useDeviceStore } from '@/utils/deviceStore';
 import {
-  OverviewTopCards,
-  OverviewExtraInfo,
-  OverviewResourcePanel,
-  OverviewHardwareShowcase,
-  OverviewCommandGrid,
+  OverviewSummaryPanel,
+  OverviewInspectionReport,
 } from './components';
 import {
-  OVERVIEW_FIELD_DEFINITIONS,
-  OVERVIEW_SECTION_CONFIG,
+  OVERVIEW_REPORT_FIELD_DEFINITIONS,
+  OVERVIEW_REPORT_FIELDS,
+  OVERVIEW_SUMMARY_FIELDS,
   createDefaultOverviewDeviceInfo,
 } from './config';
 
 const loadingInfo = ref(false);
 const loadingApp = ref(false);
 const loadingRes = ref(false);
-const deviceError = ref('');
 const wirelessDialogRef = ref(null);
 const {
   isConnected,
@@ -102,53 +79,6 @@ const rebootOptions = [
   { label: '彻底关机', icon: 'shutdown', color: 'var(--color-danger)', hoverBg: 'var(--danger-soft)', target: 'poweroff', desc: '结束当前设备会话' },
 ];
 
-const topCards = computed(() => {
-  const infoCards = OVERVIEW_SECTION_CONFIG.topInfoCards.map((card) => ({
-    ...card,
-    label: card.label || OVERVIEW_FIELD_DEFINITIONS[card.key]?.label || card.key,
-    value: deviceInfo.value[card.key] || '--',
-  }));
-
-  const appCards = OVERVIEW_SECTION_CONFIG.appCards.map((card) => ({
-    ...card,
-    value: appStatus.value[card.key] || '--',
-  }));
-
-  return [...infoCards, ...appCards];
-});
-
-const getFieldValue = (key) => deviceInfo.value[key] || OVERVIEW_FIELD_DEFINITIONS[key]?.fallback || '--';
-
-const createFieldViewModel = (key) => ({
-  key,
-  label: OVERVIEW_FIELD_DEFINITIONS[key]?.label || key,
-  value: getFieldValue(key),
-});
-
-const hardwareColumns = computed(() => (
-  OVERVIEW_SECTION_CONFIG.hardwareColumns.map((group) => group.map((key) => createFieldViewModel(key)))
-));
-
-const hardwareHeroTitle = computed(() => '设备硬件画像');
-
-const hardwareHeroDescription = computed(() => (
-  '上方聚合快速识别信息，这里专注展示设备品牌画像与底层硬件特征，便于快速判断机型环境。'
-));
-
-const hardwareHighlights = computed(() => (
-  OVERVIEW_SECTION_CONFIG.heroHighlights.map((item) => ({
-    ...createFieldViewModel(item.key),
-    label: item.label || OVERVIEW_FIELD_DEFINITIONS[item.key]?.label || item.key,
-  }))
-));
-
-const extraInfoCards = computed(() => (
-  OVERVIEW_SECTION_CONFIG.extraPanels.map((panel) => ({
-    ...panel,
-    value: getFieldValue(panel.key),
-  }))
-));
-
 const batteryMetric = computed(() => ({
   label: '电池',
   percent: resources.value.battery_level || 0,
@@ -170,7 +100,7 @@ const batteryStatusText = computed(() => {
   return '正常';
 });
 
-const sideResourceMetrics = computed(() => [
+const summaryResourceMetrics = computed(() => [
   {
     label: '存储',
     percent: resources.value.storage_percent || 0,
@@ -187,11 +117,53 @@ const sideResourceMetrics = computed(() => [
     color: 'var(--color-success)',
     accent: 'rgba(var(--color-success-rgb), 0.16)',
   },
+  {
+    label: '电池',
+    percent: batteryMetric.value.percent,
+    meta: `${batteryStatusText.value} · ${resources.value.battery_temp}°C`,
+    icon: 'battery_charging',
+    color: batteryMetric.value.color,
+    accent: batteryMetric.value.accent,
+  },
 ]);
+
+const getAppStatusValue = (key) => {
+  if (!isConnected.value) return '--';
+  return appStatus.value[key] ?? '--';
+};
+
+const getReportValue = (key) => {
+  if (key === 'system_count' || key === 'user_count' || key === 'total_count') {
+    return getAppStatusValue(key);
+  }
+
+  return deviceInfo.value[key] || OVERVIEW_REPORT_FIELD_DEFINITIONS[key]?.fallback || '--';
+};
+
+const createReportItem = (key) => {
+  const value = getReportValue(key);
+
+  return {
+    key,
+    label: OVERVIEW_REPORT_FIELD_DEFINITIONS[key]?.label || key,
+    currentValue: value,
+  };
+};
+
+const summaryBaseItems = computed(() => (
+  OVERVIEW_SUMMARY_FIELDS.map((key) => ({
+    key,
+    label: OVERVIEW_REPORT_FIELD_DEFINITIONS[key]?.label || key,
+    value: getReportValue(key),
+  }))
+));
+
+const reportItems = computed(() => (
+  OVERVIEW_REPORT_FIELDS.map((key) => createReportItem(key))
+));
 
 async function loadDeviceInfo() {
   loadingInfo.value = true;
-  deviceError.value = '';
   try {
     const info = await fetchDeviceInfo();
     const formatUnlockState = (state) => {
@@ -225,9 +197,20 @@ async function loadDeviceInfo() {
       build_version: info.build_version || '--',
       fingerprint: info.fingerprint || '--',
       kernel_version: info.kernel_version || '--',
+      manufacturer: info.manufacturer || '--',
+      product_model: info.product_model || '--',
+      product_name: info.product_name || '--',
+      security_patch: info.security_patch || '--',
+      vendor_security_patch: info.vendor_security_patch || '--',
+      build_incremental: info.build_incremental || '--',
+      build_type: info.build_type || '--',
+      build_tags: info.build_tags || '--',
+      baseband_version: info.baseband_version || '--',
+      soc_manufacturer: info.soc_manufacturer || '--',
+      soc_model: info.soc_model || '--',
+      cpu_abilist: info.cpu_abilist || '--',
     };
-  } catch (e) {
-    deviceError.value = String(e);
+  } catch (_) {
     deviceInfo.value = createDefaultOverviewDeviceInfo();
   } finally {
     loadingInfo.value = false;
@@ -293,11 +276,9 @@ function openWirelessAdb() {
 
 async function loadAllData() {
   if (!isConnected.value) {
-    deviceError.value = '没有已连接的设备';
     resetAllData();
     return;
   }
-  deviceError.value = '';
   loadDeviceInfo();
   loadAppStatus();
   loadResources();
@@ -328,7 +309,6 @@ watch(isConnected, (connected) => {
   if (connected) {
     loadAllData();
   } else {
-    deviceError.value = '设备已断开';
     resetAllData();
   }
 }, { immediate: true });
@@ -346,18 +326,22 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
-.resource-row {
+.page-container {
   display: flex;
+  flex-direction: column;
   gap: 16px;
-  flex-shrink: 0;
   width: 100%;
-  padding-bottom: 20px;
+  flex-shrink: 0;
+  // padding-bottom: 48px;
 }
 
-@media (max-width: 768px) {
-  .resource-row {
-    flex-direction: column;
-  }
+.no-scrollbar {
+  overflow: visible;
 }
+
+.overview-summary-panel {
+  width: 100%;
+  flex-shrink: 0;
+}
+
 </style>
