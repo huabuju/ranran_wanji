@@ -4,12 +4,14 @@ const archiver = require('archiver');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf-8'));
+const updateInfo = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'update.json'), 'utf-8'));
 const VERSION = pkg.version;
+const DATE_VERSION = updateInfo.dateVersion;
 const APP_NAME = 'RanranToolkit';
 const EXE_SRC = path.join(ROOT_DIR, 'src-tauri', 'target', 'release', `${APP_NAME}.exe`);
 const BIN_DIR = path.join(ROOT_DIR, 'bin');
 const OUTPUT_DIR = path.join(ROOT_DIR, 'src-tauri', 'target', 'release', 'bundle', 'portable');
-const ZIP_NAME = `${APP_NAME}-v${VERSION}-portable-windows-x86_64.zip`;
+const ZIP_NAME = `${APP_NAME}-v${VERSION}-${DATE_VERSION}-portable-windows-x86_64.zip`;
 const ZIP_PATH = path.join(OUTPUT_DIR, ZIP_NAME);
 
 function getPackagedBinDirectories() {

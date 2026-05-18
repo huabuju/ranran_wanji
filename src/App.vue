@@ -146,9 +146,9 @@ async function ensureRuntimeReady() {
 
     initGlobalAutoMirror();
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 400);
-    });
+    // await new Promise((resolve) => {
+    //   setTimeout(resolve, 400);
+    // });
 
     runtimeReady.value = true;
     void checkUpdate({ silent: true });
