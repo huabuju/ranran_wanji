@@ -297,99 +297,61 @@ function getPatchModeLabel(value) {
 }
 
 const props = defineProps({
-  patchMode: {
-    type: String,
-    default: 'magisk',
+  modeState: {
+    type: Object,
+    default: () => ({}),
   },
-  bootPath: {
-    type: String,
-    default: '',
+  executionState: {
+    type: Object,
+    default: () => ({}),
   },
-  magiskApkPath: {
-    type: String,
-    default: '',
+  sourceState: {
+    type: Object,
+    default: () => ({}),
   },
-  magiskApkOptions: {
-    type: Array,
-    default: () => [],
+  toolState: {
+    type: Object,
+    default: () => ({}),
   },
-  magiskApkDir: {
-    type: String,
-    default: '',
+  kernelSuState: {
+    type: Object,
+    default: () => ({}),
   },
-  apatchApkPath: {
-    type: String,
-    default: '',
-  },
-  apatchApkOptions: {
-    type: Array,
-    default: () => [],
-  },
-  apatchApkDir: {
-    type: String,
-    default: '',
-  },
-  apatchSuperKey: {
-    type: String,
-    default: '',
-  },
-  kernelSuPath: {
-    type: String,
-    default: '',
-  },
-  kernelSuOptions: {
-    type: Array,
-    default: () => [],
-  },
-  kernelSuDir: {
-    type: String,
-    default: '',
-  },
-  kernelSuKmi: {
-    type: String,
-    default: '',
-  },
-  kernelSuKmiOptions: {
-    type: Array,
-    default: () => [],
-  },
-  kernelSuDetectedKmi: {
-    type: String,
-    default: '',
-  },
-  outputDir: {
-    type: String,
-    default: '',
-  },
-  canPatch: {
-    type: Boolean,
-    default: false,
-  },
-  canRoot: {
-    type: Boolean,
-    default: false,
-  },
-  kernelSuRuntimeLoading: {
-    type: Boolean,
-    default: false,
-  },
-  patching: {
-    type: Boolean,
-    default: false,
-  },
-  rooting: {
-    type: Boolean,
-    default: false,
-  },
-  rootTargetPartition: {
-    type: String,
-    default: '',
-  },
-  rootPatchToolLabel: {
-    type: String,
-    default: '',
+  rootState: {
+    type: Object,
+    default: () => ({}),
   },
 });
+
+const modeState = computed(() => props.modeState || {});
+const executionState = computed(() => props.executionState || {});
+const sourceState = computed(() => props.sourceState || {});
+const toolState = computed(() => props.toolState || {});
+const kernelSuState = computed(() => props.kernelSuState || {});
+const rootState = computed(() => props.rootState || {});
+const patchMode = computed(() => modeState.value.patchMode || 'magisk');
+const bootPath = computed(() => sourceState.value.bootPath || '');
+const outputDir = computed(() => sourceState.value.outputDir || '');
+const magiskApkPath = computed(() => toolState.value.magiskApkPath || '');
+const magiskApkOptions = computed(() => toolState.value.magiskApkOptions || []);
+const magiskApkDir = computed(() => toolState.value.magiskApkDir || '');
+const apatchApkPath = computed(() => toolState.value.apatchApkPath || '');
+const apatchApkOptions = computed(() => toolState.value.apatchApkOptions || []);
+const apatchApkDir = computed(() => toolState.value.apatchApkDir || '');
+const apatchSuperKey = computed(() => toolState.value.apatchSuperKey || '');
+const kernelSuPath = computed(() => toolState.value.kernelSuPath || '');
+const kernelSuOptions = computed(() => toolState.value.kernelSuOptions || []);
+const kernelSuDir = computed(() => toolState.value.kernelSuDir || '');
+const kernelSuKmi = computed(() => kernelSuState.value.kernelSuKmi || '');
+const kernelSuKmiOptions = computed(() => kernelSuState.value.kernelSuKmiOptions || []);
+const kernelSuDetectedKmi = computed(() => kernelSuState.value.kernelSuDetectedKmi || '');
+const canPatch = computed(() => executionState.value.canPatch === true);
+const canRoot = computed(() => executionState.value.canRoot === true);
+const kernelSuRuntimeLoading = computed(() => executionState.value.kernelSuRuntimeLoading === true);
+const patching = computed(() => executionState.value.patching === true);
+const rooting = computed(() => executionState.value.rooting === true);
+const rootTargetPartition = computed(() => rootState.value.rootTargetPartition || '');
+const rootPatchToolLabel = computed(() => rootState.value.rootPatchToolLabel || '');
 
 const emit = defineEmits([
   'select-boot',
@@ -405,9 +367,9 @@ const emit = defineEmits([
   'reset',
 ]);
 
-const isBusy = computed(() => props.patching || props.rooting || props.kernelSuRuntimeLoading);
-const currentMode = computed(() => normalizePatchMode(props.patchMode));
-const currentPatchModeLabel = computed(() => getPatchModeLabel(props.patchMode));
+const isBusy = computed(() => patching.value || rooting.value || kernelSuRuntimeLoading.value);
+const currentMode = computed(() => normalizePatchMode(patchMode.value));
+const currentPatchModeLabel = computed(() => getPatchModeLabel(patchMode.value));
 const isKernelSuMode = computed(() => ['kernelsu', 'kernelsu_next', 'sukisu_ultra'].includes(currentMode.value));
 const isApatchMode = computed(() => ['apatch', 'folkpatch'].includes(currentMode.value));
 const bootInputPlaceholder = computed(() => (
@@ -421,14 +383,14 @@ const bootInputTip = computed(() => (
     : '支持本地 `boot.img`、`init_boot.img`、`payload.bin`、固件 `zip`，也支持在线 URL。检测到 Payload 时会自动提取可修补分区。'
 ));
 const currentToolOptions = computed(() => {
-  if (isKernelSuMode.value) return props.kernelSuOptions;
-  if (isApatchMode.value) return props.apatchApkOptions;
-  return props.magiskApkOptions;
+  if (isKernelSuMode.value) return kernelSuOptions.value;
+  if (isApatchMode.value) return apatchApkOptions.value;
+  return magiskApkOptions.value;
 });
 const currentToolPath = computed(() => {
-  if (isKernelSuMode.value) return props.kernelSuPath;
-  if (isApatchMode.value) return props.apatchApkPath;
-  return props.magiskApkPath;
+  if (isKernelSuMode.value) return kernelSuPath.value;
+  if (isApatchMode.value) return apatchApkPath.value;
+  return magiskApkPath.value;
 });
 const currentToolLabel = computed(() => {
   const matched = currentToolOptions.value.find((item) => item.value === currentToolPath.value);
@@ -438,9 +400,9 @@ const currentToolTitle = computed(() => {
   return `${currentPatchModeLabel.value} 版本`;
 });
 const currentToolScanDir = computed(() => {
-  if (isKernelSuMode.value) return String(props.kernelSuDir || '').trim();
-  if (isApatchMode.value) return String(props.apatchApkDir || '').trim();
-  return String(props.magiskApkDir || '').trim();
+  if (isKernelSuMode.value) return String(kernelSuDir.value || '').trim();
+  if (isApatchMode.value) return String(apatchApkDir.value || '').trim();
+  return String(magiskApkDir.value || '').trim();
 });
 
 const currentToolPlaceholder = computed(() => {
@@ -456,9 +418,9 @@ const currentToolTip = computed(() => {
   }
   return 'Magisk 模式会沿用当前手机端修补流程，并使用 `bin/boot-patch/magisk` 目录下的 APK 资源；设备需要保持 ADB 正常连接。';
 });
-const effectiveRootToolLabel = computed(() => props.rootPatchToolLabel || currentToolLabel.value);
+const effectiveRootToolLabel = computed(() => rootPatchToolLabel.value || currentToolLabel.value);
 const effectiveRootTargetPartitionText = computed(() => (
-  props.rootTargetPartition ? `，目标分区为 ${props.rootTargetPartition}` : ''
+  rootTargetPartition.value ? `，目标分区为 ${rootTargetPartition.value}` : ''
 ));
 const isOutputExpanded = ref(false);
 

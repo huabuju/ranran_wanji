@@ -62,29 +62,12 @@
         <div class="hero-console">
           <div class="hero-form-shell">
             <BootPatchFormPanel
-              :patch-mode="patchMode"
-              :boot-path="bootPath"
-              :magisk-apk-path="magiskApkPath"
-              :magisk-apk-options="magiskApkOptions"
-              :magisk-apk-dir="magiskApkDir"
-              :apatch-apk-path="apatchApkPath"
-              :apatch-apk-options="apatchApkOptions"
-              :apatch-apk-dir="apatchApkDir"
-              :apatch-super-key="apatchSuperKey"
-              :kernel-su-path="kernelSuPath"
-              :kernel-su-options="kernelSuOptions"
-              :kernel-su-dir="kernelSuDir"
-              :kernel-su-kmi="kernelSuKmi"
-              :kernel-su-kmi-options="kernelSuKmiOptions"
-              :kernel-su-detected-kmi="kernelSuDetectedKmi"
-              :output-dir="outputDir"
-              :can-patch="canPatch"
-              :can-root="canRoot"
-              :kernel-su-runtime-loading="kernelSuRuntimeLoading"
-              :patching="patching"
-              :rooting="rooting"
-              :root-target-partition="rootTargetPartition"
-              :root-patch-tool-label="rootPatchToolLabel"
+              :mode-state="modeState"
+              :execution-state="executionState"
+              :source-state="sourceState"
+              :tool-state="toolState"
+              :kernel-su-state="kernelSuState"
+              :root-state="rootState"
               @select-boot="$emit('select-boot')"
               @update:boot-path="$emit('update:boot-path', $event)"
               @update:magisk-apk-path="$emit('update:magisk-apk-path', $event)"
@@ -178,131 +161,74 @@ function normalizePatchMode(value) {
 }
 
 const props = defineProps({
-  canPatch: {
-    type: Boolean,
-    default: false,
+  modeState: {
+    type: Object,
+    default: () => ({}),
   },
-  canRoot: {
-    type: Boolean,
-    default: false,
+  executionState: {
+    type: Object,
+    default: () => ({}),
   },
-  patchMode: {
-    type: String,
-    default: 'magisk',
+  patchFlags: {
+    type: Object,
+    default: () => ({}),
   },
-  patchModeOptions: {
-    type: Array,
-    default: () => [],
+  sourceState: {
+    type: Object,
+    default: () => ({}),
   },
-  kernelSuRuntimeLoading: {
-    type: Boolean,
-    default: false,
+  toolState: {
+    type: Object,
+    default: () => ({}),
   },
-  patching: {
-    type: Boolean,
-    default: false,
+  kernelSuState: {
+    type: Object,
+    default: () => ({}),
   },
-  rooting: {
-    type: Boolean,
-    default: false,
-  },
-  keepVerity: {
-    type: Boolean,
-    default: false,
-  },
-  keepForceEncrypt: {
-    type: Boolean,
-    default: false,
-  },
-  patchVbmetaFlag: {
-    type: Boolean,
-    default: false,
-  },
-  recoveryMode: {
-    type: Boolean,
-    default: false,
-  },
-  kernelSuAllowShell: {
-    type: Boolean,
-    default: false,
-  },
-  kernelSuEnableAdbd: {
-    type: Boolean,
-    default: false,
-  },
-  bootPath: {
-    type: String,
-    default: '',
-  },
-  magiskApkPath: {
-    type: String,
-    default: '',
-  },
-  magiskApkOptions: {
-    type: Array,
-    default: () => [],
-  },
-  magiskApkDir: {
-    type: String,
-    default: '',
-  },
-  apatchApkPath: {
-    type: String,
-    default: '',
-  },
-  apatchApkOptions: {
-    type: Array,
-    default: () => [],
-  },
-  apatchApkDir: {
-    type: String,
-    default: '',
-  },
-  apatchSuperKey: {
-    type: String,
-    default: '',
-  },
-  kernelSuPath: {
-    type: String,
-    default: '',
-  },
-  kernelSuOptions: {
-    type: Array,
-    default: () => [],
-  },
-  kernelSuDir: {
-    type: String,
-    default: '',
-  },
-  kernelSuKmi: {
-    type: String,
-    default: '',
-  },
-  kernelSuKmiOptions: {
-    type: Array,
-    default: () => [],
-  },
-  kernelSuDetectedKmi: {
-    type: String,
-    default: '',
-  },
-  outputDir: {
-    type: String,
-    default: '',
-  },
-  isConnected: {
-    type: Boolean,
-    default: false,
-  },
-  rootTargetPartition: {
-    type: String,
-    default: '',
-  },
-  rootPatchToolLabel: {
-    type: String,
-    default: '',
+  rootState: {
+    type: Object,
+    default: () => ({}),
   },
 });
+
+const modeState = computed(() => props.modeState || {});
+const executionState = computed(() => props.executionState || {});
+const patchFlags = computed(() => props.patchFlags || {});
+const sourceState = computed(() => props.sourceState || {});
+const toolState = computed(() => props.toolState || {});
+const kernelSuState = computed(() => props.kernelSuState || {});
+const rootState = computed(() => props.rootState || {});
+const patchMode = computed(() => modeState.value.patchMode || 'magisk');
+const patchModeOptions = computed(() => modeState.value.patchModeOptions || []);
+const canPatch = computed(() => executionState.value.canPatch === true);
+const canRoot = computed(() => executionState.value.canRoot === true);
+const kernelSuRuntimeLoading = computed(() => executionState.value.kernelSuRuntimeLoading === true);
+const patching = computed(() => executionState.value.patching === true);
+const rooting = computed(() => executionState.value.rooting === true);
+const isConnected = computed(() => executionState.value.isConnected === true);
+const keepVerity = computed(() => patchFlags.value.keepVerity === true);
+const keepForceEncrypt = computed(() => patchFlags.value.keepForceEncrypt === true);
+const patchVbmetaFlag = computed(() => patchFlags.value.patchVbmetaFlag === true);
+const recoveryMode = computed(() => patchFlags.value.recoveryMode === true);
+const kernelSuAllowShell = computed(() => patchFlags.value.kernelSuAllowShell === true);
+const kernelSuEnableAdbd = computed(() => patchFlags.value.kernelSuEnableAdbd === true);
+const bootPath = computed(() => sourceState.value.bootPath || '');
+const outputDir = computed(() => sourceState.value.outputDir || '');
+const magiskApkPath = computed(() => toolState.value.magiskApkPath || '');
+const magiskApkOptions = computed(() => toolState.value.magiskApkOptions || []);
+const magiskApkDir = computed(() => toolState.value.magiskApkDir || '');
+const apatchApkPath = computed(() => toolState.value.apatchApkPath || '');
+const apatchApkOptions = computed(() => toolState.value.apatchApkOptions || []);
+const apatchApkDir = computed(() => toolState.value.apatchApkDir || '');
+const apatchSuperKey = computed(() => toolState.value.apatchSuperKey || '');
+const kernelSuPath = computed(() => toolState.value.kernelSuPath || '');
+const kernelSuOptions = computed(() => toolState.value.kernelSuOptions || []);
+const kernelSuDir = computed(() => toolState.value.kernelSuDir || '');
+const kernelSuKmi = computed(() => kernelSuState.value.kernelSuKmi || '');
+const kernelSuKmiOptions = computed(() => kernelSuState.value.kernelSuKmiOptions || []);
+const kernelSuDetectedKmi = computed(() => kernelSuState.value.kernelSuDetectedKmi || '');
+const rootTargetPartition = computed(() => rootState.value.rootTargetPartition || '');
+const rootPatchToolLabel = computed(() => rootState.value.rootPatchToolLabel || '');
 
 const emit = defineEmits([
   'update:keep-verity',
@@ -325,37 +251,37 @@ const emit = defineEmits([
   'reset',
 ]);
 
-const currentMode = computed(() => normalizePatchMode(props.patchMode));
+const currentMode = computed(() => normalizePatchMode(patchMode.value));
 const isKernelSuMode = computed(() => ['kernelsu', 'kernelsu_next', 'sukisu_ultra'].includes(currentMode.value));
 const isApatchMode = computed(() => ['apatch', 'folkpatch'].includes(currentMode.value));
 const currentPatchModeLabel = computed(() => (
-  props.patchModeOptions.find((item) => item.value === props.patchMode)?.label
+  patchModeOptions.value.find((item) => item.value === patchMode.value)?.label
   || (isKernelSuMode.value ? 'KernelSU' : (isApatchMode.value ? 'APatch' : 'Magisk'))
 ));
 const readinessChips = computed(() => ([
-  { key: 'device', label: 'ADB 设备', icon: 'device', ready: props.isConnected },
-  { key: 'boot', label: 'Boot 来源', icon: 'target', ready: Boolean(props.bootPath) },
+  { key: 'device', label: 'ADB 设备', icon: 'device', ready: isConnected.value },
+  { key: 'boot', label: 'Boot 来源', icon: 'target', ready: Boolean(bootPath.value) },
   {
     key: 'tool',
     label: currentPatchModeLabel.value,
     icon: 'package',
     ready: Boolean(
       isKernelSuMode.value
-        ? props.kernelSuPath
-        : (isApatchMode.value ? props.apatchApkPath : props.magiskApkPath)
+        ? kernelSuPath.value
+        : (isApatchMode.value ? apatchApkPath.value : magiskApkPath.value)
     ),
   },
-  { key: 'output', label: '输出目录', icon: 'folder', ready: Boolean(props.outputDir) },
+  { key: 'output', label: '输出目录', icon: 'folder', ready: Boolean(outputDir.value) },
 ]));
 
 const riskNotice = computed(() => {
-  if (props.patching) {
+  if (patching.value) {
     if (isKernelSuMode.value) return 'KernelSU 修补期间请勿断开 USB、重启手机或切换设备模式。APK 资源、镜像推送与手机端 ksud 执行任一步骤被中断，都可能导致产物不完整。';
     if (isApatchMode.value) return 'APatch 修补期间请勿断开 USB、重启手机或切换设备模式。SuperKey 填错或资源不匹配都可能导致产物不可用。';
     return `${currentPatchModeLabel.value} 修补期间请勿断开 USB、重启手机或切换设备模式。任何中断都可能导致修补结果异常，后续刷入风险需自行判断。`;
   }
 
-  if (props.rooting) {
+  if (rooting.value) {
     return '一键 Root 期间请保持 USB 连接稳定，不要手动切换 ADB / Fastboot / FastbootD 模式。若设备已自动进入刷入流程，请等待程序完成后再操作。';
   }
 
@@ -389,14 +315,14 @@ const patchOptionChecklist = computed(() => (
         key: 'kernel-su-allow-shell',
         label: 'ALLOW SHELL',
         description: '允许 shell 默认拿 root',
-        checked: props.kernelSuAllowShell,
+        checked: kernelSuAllowShell.value,
         emitName: 'update:kernel-su-allow-shell',
       },
       {
         key: 'kernel-su-enable-adbd',
         label: 'ENABLE ADBD',
         description: '强制启用 adbd，并关闭 adbd auth',
-        checked: props.kernelSuEnableAdbd,
+        checked: kernelSuEnableAdbd.value,
         emitName: 'update:kernel-su-enable-adbd',
       },
     ]
@@ -407,28 +333,28 @@ const patchOptionChecklist = computed(() => (
         key: 'keep-verity',
         label: 'KEEPVERITY',
         description: '保留 verity',
-        checked: props.keepVerity,
+        checked: keepVerity.value,
         emitName: 'update:keep-verity',
       },
       {
         key: 'keep-force-encrypt',
         label: 'KEEPFORCEENCRYPT',
         description: '保留强制加密',
-        checked: props.keepForceEncrypt,
+        checked: keepForceEncrypt.value,
         emitName: 'update:keep-force-encrypt',
       },
       {
         key: 'patch-vbmeta-flag',
         label: 'PATCHVBMETAFLAG',
         description: '处理 vbmeta flag',
-        checked: props.patchVbmetaFlag,
+        checked: patchVbmetaFlag.value,
         emitName: 'update:patch-vbmeta-flag',
       },
       {
         key: 'recovery-mode',
         label: 'RECOVERYMODE',
         description: 'Recovery 模式',
-        checked: props.recoveryMode,
+        checked: recoveryMode.value,
         emitName: 'update:recovery-mode',
       },
       ]
@@ -439,7 +365,7 @@ function handlePatchModeCommand(value) {
 }
 
 function toggleOption(item) {
-  if (props.patching || props.rooting) return;
+  if (patching.value || rooting.value) return;
   emit(item.emitName, !item.checked);
 }
 </script>
