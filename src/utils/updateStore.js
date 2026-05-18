@@ -5,6 +5,8 @@ const isChecking = ref(false);
 const updateInfo = ref({
   version: '',
   localVersion: '',
+  dateVersion: '',
+  localDateVersion: '',
   date: '',
   notes: [],
   url: '',

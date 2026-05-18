@@ -58,6 +58,7 @@ import StatusBar from '@/components/layout/StatusBar.vue';
 import SettingsDialog from '@/components/settings/SettingsDialog.vue';
 import { initGlobalAutoMirror } from '@/utils/scrcpyStore';
 import { useDeviceStore } from '@/utils/deviceStore';
+import { checkUpdate } from '@/utils/updater';
 
 const activeComponentRef = ref(null);
 const settingsDialogRef = ref(null);
@@ -150,6 +151,7 @@ async function ensureRuntimeReady() {
     });
 
     runtimeReady.value = true;
+    void checkUpdate({ silent: true });
   } catch (error) {
     runtimeError.value = error?.toString?.() || '运行时依赖初始化失败';
     runtimeMessage.value = '运行时依赖准备失败，请确认安装包中的 bin 资源完整后重试。';

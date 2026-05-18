@@ -1,5 +1,6 @@
 import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/core';
+import { formatDateTime } from './date';
 import { useUpdateStore } from './updateStore';
 
 const { showUpdateDialog, isChecking, updateInfo } = useUpdateStore();
@@ -27,15 +28,43 @@ function isNewerVersion(remote, local) {
   return false;
 }
 
+function getLocalDateVersion() {
+  if (typeof __APP_BUILD_TIME__ !== 'string' || !__APP_BUILD_TIME__) {
+    return '';
+  }
+
+  return formatDateTime(__APP_BUILD_TIME__, 'YYYYMMDDHHmmss');
+}
+
+function normalizeDateVersion(value) {
+  return String(value || '').replace(/\D/g, '');
+}
+
+function hasNewerDateVersion(remote, local) {
+  const remoteDateVersion = normalizeDateVersion(remote);
+  const localDateVersion = normalizeDateVersion(local);
+
+  if (!remoteDateVersion || !localDateVersion) {
+    return false;
+  }
+
+  return remoteDateVersion > localDateVersion;
+}
+
 /**
  * 检查更新并弹出提示
  * @returns {Promise<'updated' | 'no_update' | 'failed'>}
  */
-export async function checkUpdate() {
-  isChecking.value = true;
+export async function checkUpdate(options = {}) {
+  const { silent = false } = options;
+
+  if (!silent) {
+    isChecking.value = true;
+  }
   try {
     // 1. 获取本地版本
     const localVersion = await getVersion();
+    const localDateVersion = getLocalDateVersion();
 
     // 2. 获取远程版本信息 (通过 Rust 绕过 CORS)
     const jsonStr = await invoke('get_online_update_json');
@@ -46,17 +75,23 @@ export async function checkUpdate() {
       return 'failed';
     }
 
+    const remoteDateVersion = remoteData.dateVersion || remoteData.date;
+    const hasUpdate = isNewerVersion(remoteData.version, localVersion)
+      || (remoteData.version === localVersion && hasNewerDateVersion(remoteDateVersion, localDateVersion));
+
     // 3. 对比版本
-    if (isNewerVersion(remoteData.version, localVersion)) {
+    if (hasUpdate) {
       // 4. 更新状态并显示弹窗
       updateInfo.value = {
         version: remoteData.version,
         localVersion: localVersion,
+        dateVersion: remoteDateVersion,
+        localDateVersion,
         date: remoteData.date,
         notes: Array.isArray(remoteData.notes) ? remoteData.notes : [remoteData.notes],
         url: remoteData.url
       };
-      
+
       showUpdateDialog.value = true;
       return 'updated';
     }
@@ -65,7 +100,9 @@ export async function checkUpdate() {
     console.error('Update check failed:', error);
     return 'failed';
   } finally {
-    isChecking.value = false;
+    if (!silent) {
+      isChecking.value = false;
+    }
   }
 }
 

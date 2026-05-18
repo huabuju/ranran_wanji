@@ -166,7 +166,7 @@ function resolveBuildTime() {
     return '';
   }
 
-  return formatDateTime(__APP_BUILD_TIME__, 'YYYY-MM-DD HH:mm:ss');
+  return formatDateTime(__APP_BUILD_TIME__, 'YYYYMMDDHHmmss');
 }
 
 defineExpose({ refresh });

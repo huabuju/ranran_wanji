@@ -1,5 +1,5 @@
 <template>
-  <GlassModal :show="showUpdateDialog" container-class="app-dialog-shell">
+  <GlassModal :show="showUpdateDialog" max-width="520px" container-class="app-dialog-shell">
     <!-- Header with Gradient and Icon -->
     <div class="update-header">
       <div class="icon-orbit">
@@ -10,6 +10,12 @@
         <span class="badge current">{{ updateInfo.localVersion }}</span>
         <el-icon class="arrow-icon"><Right /></el-icon>
         <span class="badge latest">{{ updateInfo.version }}</span>
+      </div>
+      <div v-if="updateInfo.dateVersion || updateInfo.localDateVersion" class="date-version-row">
+        <span>时间版本</span>
+        <strong>{{ updateInfo.localDateVersion || '--' }}</strong>
+        <el-icon class="date-arrow"><Right /></el-icon>
+        <strong>{{ updateInfo.dateVersion || '--' }}</strong>
       </div>
     </div>
 
@@ -135,6 +141,35 @@ async function handleUpdate() {
     .arrow-icon {
       font-size: 14px;
       opacity: 0.92;
+    }
+  }
+
+  .date-version-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.13);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 12px;
+    line-height: 1;
+    backdrop-filter: blur(10px);
+
+    strong {
+      color: rgba(255, 255, 255, 0.96);
+      font-family: 'Inter', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .date-arrow {
+      font-size: 12px;
+      opacity: 0.8;
     }
   }
 }
