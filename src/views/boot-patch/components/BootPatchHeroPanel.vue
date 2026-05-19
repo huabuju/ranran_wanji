@@ -154,6 +154,7 @@ function normalizePatchMode(value) {
   if (normalized === 'kernelsu') return 'kernelsu';
   if (normalized === 'kernelsu_next') return 'kernelsu_next';
   if (normalized === 'sukisu_ultra') return 'sukisu_ultra';
+  if (normalized === 'resukisu') return 'resukisu';
   if (normalized === 'magisk_alpha') return 'magisk_alpha';
   if (normalized === 'apatch') return 'apatch';
   if (normalized === 'folkpatch') return 'folkpatch';
@@ -252,7 +253,7 @@ const emit = defineEmits([
 ]);
 
 const currentMode = computed(() => normalizePatchMode(patchMode.value));
-const isKernelSuMode = computed(() => ['kernelsu', 'kernelsu_next', 'sukisu_ultra'].includes(currentMode.value));
+const isKernelSuMode = computed(() => ['kernelsu', 'kernelsu_next', 'sukisu_ultra', 'resukisu'].includes(currentMode.value));
 const isApatchMode = computed(() => ['apatch', 'folkpatch'].includes(currentMode.value));
 const currentPatchModeLabel = computed(() => (
   patchModeOptions.value.find((item) => item.value === patchMode.value)?.label

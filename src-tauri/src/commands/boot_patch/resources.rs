@@ -5,6 +5,7 @@ pub(super) fn normalize_patch_mode(value: &str) -> String {
         PATCH_MODE_KERNELSU => PATCH_MODE_KERNELSU.to_string(),
         PATCH_MODE_KERNELSU_NEXT => PATCH_MODE_KERNELSU_NEXT.to_string(),
         PATCH_MODE_SUKISU_ULTRA => PATCH_MODE_SUKISU_ULTRA.to_string(),
+        PATCH_MODE_RESUKISU => PATCH_MODE_RESUKISU.to_string(),
         PATCH_MODE_MAGISK_ALPHA => PATCH_MODE_MAGISK_ALPHA.to_string(),
         PATCH_MODE_APATCH => PATCH_MODE_APATCH.to_string(),
         PATCH_MODE_FOLKPATCH => PATCH_MODE_FOLKPATCH.to_string(),
@@ -15,7 +16,7 @@ pub(super) fn normalize_patch_mode(value: &str) -> String {
 pub(super) fn is_kernelsu_patch_mode(value: &str) -> bool {
     matches!(
         normalize_patch_mode(value).as_str(),
-        PATCH_MODE_KERNELSU | PATCH_MODE_KERNELSU_NEXT | PATCH_MODE_SUKISU_ULTRA
+        PATCH_MODE_KERNELSU | PATCH_MODE_KERNELSU_NEXT | PATCH_MODE_SUKISU_ULTRA | PATCH_MODE_RESUKISU
     )
 }
 
@@ -38,6 +39,7 @@ pub(super) fn get_patch_mode_label(value: &str) -> &'static str {
         PATCH_MODE_KERNELSU => "KernelSU",
         PATCH_MODE_KERNELSU_NEXT => "KernelSU_Next",
         PATCH_MODE_SUKISU_ULTRA => "SukiSU_Ultra",
+        PATCH_MODE_RESUKISU => "ReSukiSU",
         _ => "Magisk",
     }
 }
@@ -53,6 +55,7 @@ pub(super) fn get_kernel_patch_dir_name(value: &str) -> &'static str {
     match normalize_patch_mode(value).as_str() {
         PATCH_MODE_KERNELSU_NEXT => "KernelSU_Next",
         PATCH_MODE_SUKISU_ULTRA => "SukiSU_Ultra",
+        PATCH_MODE_RESUKISU => "ReSukiSU",
         _ => "KernelSU",
     }
 }
@@ -72,6 +75,7 @@ pub(super) fn get_patch_output_prefix(value: &str) -> &'static str {
         PATCH_MODE_KERNELSU => "kernelsu_patched",
         PATCH_MODE_KERNELSU_NEXT => "kernelsu_next_patched",
         PATCH_MODE_SUKISU_ULTRA => "sukisu_ultra_patched",
+        PATCH_MODE_RESUKISU => "resukisu_patched",
         _ => "magisk_patched",
     }
 }

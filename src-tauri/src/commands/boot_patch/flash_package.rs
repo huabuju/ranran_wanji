@@ -12,6 +12,7 @@ pub(super) fn get_patch_mode_manager_name(patch_mode: &str) -> &'static str {
         PATCH_MODE_KERNELSU => "KernelSU",
         PATCH_MODE_KERNELSU_NEXT => "KernelSU_Next",
         PATCH_MODE_SUKISU_ULTRA => "SukiSU_Ultra",
+        PATCH_MODE_RESUKISU => "ReSukiSU",
         _ => "Magisk",
     }
 }
@@ -25,7 +26,7 @@ pub(super) fn get_patch_mode_manager_apk_path(
     let normalized_mode = normalize_patch_mode(patch_mode);
     let candidate = match normalized_mode.as_str() {
         PATCH_MODE_APATCH | PATCH_MODE_FOLKPATCH => apatch_apk_path,
-        PATCH_MODE_KERNELSU | PATCH_MODE_KERNELSU_NEXT | PATCH_MODE_SUKISU_ULTRA => {
+        PATCH_MODE_KERNELSU | PATCH_MODE_KERNELSU_NEXT | PATCH_MODE_SUKISU_ULTRA | PATCH_MODE_RESUKISU => {
             kernel_su_apk_path.ok_or_else(|| {
                 format!(
                     "{} 管理器 APK 路径为空",

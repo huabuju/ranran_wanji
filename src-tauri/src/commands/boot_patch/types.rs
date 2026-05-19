@@ -112,6 +112,7 @@ pub struct BootPatchToolOptionsResponse {
     pub kernel_su_options: Vec<KernelSuVersionItem>,
     pub kernel_su_next_options: Vec<KernelSuVersionItem>,
     pub suki_su_ultra_options: Vec<KernelSuVersionItem>,
+    pub re_suki_su_options: Vec<KernelSuVersionItem>,
     pub magisk_apk_dir: String,
     pub magisk_alpha_apk_dir: String,
     pub apatch_apk_dir: String,
@@ -119,6 +120,7 @@ pub struct BootPatchToolOptionsResponse {
     pub kernel_su_dir: String,
     pub kernel_su_next_dir: String,
     pub suki_su_ultra_dir: String,
+    pub re_suki_su_dir: String,
 }
 
 #[derive(Debug, Serialize, Clone)]

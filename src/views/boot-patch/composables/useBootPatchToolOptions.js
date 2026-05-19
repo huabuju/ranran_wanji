@@ -14,6 +14,7 @@ export function useBootPatchToolOptions(form) {
   const folkPatchApkOptions = ref([]);
   const kernelSuNextOptions = ref([]);
   const sukiSuUltraOptions = ref([]);
+  const reSukiSuOptions = ref([]);
   const magiskApkDir = ref('');
   const magiskAlphaApkDir = ref('');
   const apatchApkDir = ref('');
@@ -21,6 +22,7 @@ export function useBootPatchToolOptions(form) {
   const folkPatchApkDir = ref('');
   const kernelSuNextDir = ref('');
   const sukiSuUltraDir = ref('');
+  const reSukiSuDir = ref('');
 
   function getApatchToolOptionsByMode(mode) {
     return normalizePatchMode(mode) === 'folkpatch' ? folkPatchApkOptions.value : apatchApkOptions.value;
@@ -42,6 +44,7 @@ export function useBootPatchToolOptions(form) {
     const normalized = normalizePatchMode(mode);
     if (normalized === 'kernelsu_next') return kernelSuNextOptions.value;
     if (normalized === 'sukisu_ultra') return sukiSuUltraOptions.value;
+    if (normalized === 'resukisu') return reSukiSuOptions.value;
     return kernelSuOptions.value;
   }
 
@@ -49,6 +52,7 @@ export function useBootPatchToolOptions(form) {
     const normalized = normalizePatchMode(mode);
     if (normalized === 'kernelsu_next') return kernelSuNextDir.value;
     if (normalized === 'sukisu_ultra') return sukiSuUltraDir.value;
+    if (normalized === 'resukisu') return reSukiSuDir.value;
     return kernelSuDir.value;
   }
 
@@ -103,6 +107,9 @@ export function useBootPatchToolOptions(form) {
     if (sukiSuUltraOptions.value.length > 0) {
       return 'sukisu_ultra';
     }
+    if (reSukiSuOptions.value.length > 0) {
+      return 'resukisu';
+    }
     if (apatchApkOptions.value.length > 0) {
       return 'apatch';
     }
@@ -131,6 +138,7 @@ export function useBootPatchToolOptions(form) {
         kernelSuOptions: [],
         kernelSuNextOptions: [],
         sukiSuUltraOptions: [],
+        reSukiSuOptions: [],
         magiskApkDir: '',
         magiskAlphaApkDir: '',
         apatchApkDir: '',
@@ -138,6 +146,7 @@ export function useBootPatchToolOptions(form) {
         kernelSuDir: '',
         kernelSuNextDir: '',
         sukiSuUltraDir: '',
+        reSukiSuDir: '',
       };
     }
 
@@ -148,6 +157,7 @@ export function useBootPatchToolOptions(form) {
     const kernelsuOptions = Array.isArray(toolOptions?.kernelSuOptions) ? toolOptions.kernelSuOptions : [];
     const kernelSuNextModeOptions = Array.isArray(toolOptions?.kernelSuNextOptions) ? toolOptions.kernelSuNextOptions : [];
     const sukiSuUltraModeOptions = Array.isArray(toolOptions?.sukiSuUltraOptions) ? toolOptions.sukiSuUltraOptions : [];
+    const reSukiSuModeOptions = Array.isArray(toolOptions?.reSukiSuOptions) ? toolOptions.reSukiSuOptions : [];
 
     magiskApkOptions.value = magiskOptions;
     magiskAlphaApkOptions.value = magiskAlphaOptions;
@@ -156,6 +166,7 @@ export function useBootPatchToolOptions(form) {
     kernelSuOptions.value = kernelsuOptions;
     kernelSuNextOptions.value = kernelSuNextModeOptions;
     sukiSuUltraOptions.value = sukiSuUltraModeOptions;
+    reSukiSuOptions.value = reSukiSuModeOptions;
     magiskApkDir.value = String(toolOptions?.magiskApkDir || '').trim();
     magiskAlphaApkDir.value = String(toolOptions?.magiskAlphaApkDir || '').trim();
     apatchApkDir.value = String(toolOptions?.apatchApkDir || '').trim();
@@ -163,6 +174,7 @@ export function useBootPatchToolOptions(form) {
     kernelSuDir.value = String(toolOptions?.kernelSuDir || '').trim();
     kernelSuNextDir.value = String(toolOptions?.kernelSuNextDir || '').trim();
     sukiSuUltraDir.value = String(toolOptions?.sukiSuUltraDir || '').trim();
+    reSukiSuDir.value = String(toolOptions?.reSukiSuDir || '').trim();
 
     if (!getMagiskToolOptionsByMode(form.patchMode).some((item) => item.value === form.magiskApkPath)) {
       form.magiskApkPath = getDefaultMagiskToolPath(form.patchMode);
@@ -192,6 +204,7 @@ export function useBootPatchToolOptions(form) {
     folkPatchApkOptions,
     kernelSuNextOptions,
     sukiSuUltraOptions,
+    reSukiSuOptions,
     magiskApkDir,
     magiskAlphaApkDir,
     apatchApkDir,
@@ -199,6 +212,7 @@ export function useBootPatchToolOptions(form) {
     folkPatchApkDir,
     kernelSuNextDir,
     sukiSuUltraDir,
+    reSukiSuDir,
     currentApatchToolOptions,
     currentApatchToolDir,
     currentMagiskToolOptions,

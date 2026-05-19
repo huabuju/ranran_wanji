@@ -933,6 +933,7 @@ pub(super) fn get_boot_patch_tool_options_impl(
     let kernelsu_dir = get_kernel_patch_versions_dir(&window, PATCH_MODE_KERNELSU);
     let kernelsu_next_dir = get_kernel_patch_versions_dir(&window, PATCH_MODE_KERNELSU_NEXT);
     let sukisu_ultra_dir = get_kernel_patch_versions_dir(&window, PATCH_MODE_SUKISU_ULTRA);
+    let resukisu_dir = get_kernel_patch_versions_dir(&window, PATCH_MODE_RESUKISU);
     let magisk_apk_options = list_apk_file_options(&magisk_dir)?;
     let magisk_alpha_apk_options = list_apk_file_options(&magisk_alpha_dir)?;
     let apatch_apk_options = list_apk_file_options(&apatch_dir)?;
@@ -940,6 +941,7 @@ pub(super) fn get_boot_patch_tool_options_impl(
     let kernel_su_options = list_kernelsu_versions(&window)?;
     let kernel_su_next_options = list_kernel_patch_versions(&window, PATCH_MODE_KERNELSU_NEXT)?;
     let suki_su_ultra_options = list_kernel_patch_versions(&window, PATCH_MODE_SUKISU_ULTRA)?;
+    let re_suki_su_options = list_kernel_patch_versions(&window, PATCH_MODE_RESUKISU)?;
 
     Ok(BootPatchToolOptionsResponse {
         magisk_apk_options,
@@ -949,6 +951,7 @@ pub(super) fn get_boot_patch_tool_options_impl(
         kernel_su_options,
         kernel_su_next_options,
         suki_su_ultra_options,
+        re_suki_su_options,
         magisk_apk_dir: magisk_dir.to_string_lossy().to_string(),
         magisk_alpha_apk_dir: magisk_alpha_dir.to_string_lossy().to_string(),
         apatch_apk_dir: apatch_dir.to_string_lossy().to_string(),
@@ -956,6 +959,7 @@ pub(super) fn get_boot_patch_tool_options_impl(
         kernel_su_dir: kernelsu_dir.to_string_lossy().to_string(),
         kernel_su_next_dir: kernelsu_next_dir.to_string_lossy().to_string(),
         suki_su_ultra_dir: sukisu_ultra_dir.to_string_lossy().to_string(),
+        re_suki_su_dir: resukisu_dir.to_string_lossy().to_string(),
     })
 }
 

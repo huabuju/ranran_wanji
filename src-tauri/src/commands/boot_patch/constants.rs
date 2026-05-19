@@ -22,6 +22,8 @@ pub(super) const PATCH_MODE_KERNELSU_NEXT: &str = "kernelsu_next";
 
 pub(super) const PATCH_MODE_SUKISU_ULTRA: &str = "sukisu_ultra";
 
+pub(super) const PATCH_MODE_RESUKISU: &str = "resukisu";
+
 pub(super) const APATCH_SUPER_KEY_LENGTH: usize = 24;
 
 pub(super) const APATCH_SUPER_KEY_MIN_LENGTH: usize = 8;

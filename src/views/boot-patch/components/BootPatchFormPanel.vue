@@ -279,6 +279,7 @@ function normalizePatchMode(value) {
   if (normalized === 'kernelsu') return 'kernelsu';
   if (normalized === 'kernelsu_next') return 'kernelsu_next';
   if (normalized === 'sukisu_ultra') return 'sukisu_ultra';
+  if (normalized === 'resukisu') return 'resukisu';
   if (normalized === 'magisk_alpha') return 'magisk_alpha';
   if (normalized === 'apatch') return 'apatch';
   if (normalized === 'folkpatch') return 'folkpatch';
@@ -290,6 +291,7 @@ function getPatchModeLabel(value) {
   if (normalized === 'kernelsu') return 'KernelSU';
   if (normalized === 'kernelsu_next') return 'KernelSU_Next';
   if (normalized === 'sukisu_ultra') return 'SukiSU_Ultra';
+  if (normalized === 'resukisu') return 'ReSukiSU';
   if (normalized === 'magisk_alpha') return 'Magisk_Alpha';
   if (normalized === 'apatch') return 'APatch';
   if (normalized === 'folkpatch') return 'FolkPatch';
@@ -370,7 +372,7 @@ const emit = defineEmits([
 const isBusy = computed(() => patching.value || rooting.value || kernelSuRuntimeLoading.value);
 const currentMode = computed(() => normalizePatchMode(patchMode.value));
 const currentPatchModeLabel = computed(() => getPatchModeLabel(patchMode.value));
-const isKernelSuMode = computed(() => ['kernelsu', 'kernelsu_next', 'sukisu_ultra'].includes(currentMode.value));
+const isKernelSuMode = computed(() => ['kernelsu', 'kernelsu_next', 'sukisu_ultra', 'resukisu'].includes(currentMode.value));
 const isApatchMode = computed(() => ['apatch', 'folkpatch'].includes(currentMode.value));
 const bootInputPlaceholder = computed(() => (
   isApatchMode.value
