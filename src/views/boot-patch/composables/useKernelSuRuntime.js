@@ -39,7 +39,7 @@ export function useKernelSuRuntime({ form, patching, rooting, addLocalLog }) {
     kernelSuRuntimeLoading.value = true;
 
     try {
-      const runtime = await getKernelSuRuntime({ kernelSuPath: currentPath });
+      const runtime = await getKernelSuRuntime({ kernelSuPath: currentPath, patchMode: form.patchMode });
       if (requestId !== kernelSuRuntimeRequestId || shouldFreezeRuntimeState()) {
         return;
       }

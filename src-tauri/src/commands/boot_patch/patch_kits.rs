@@ -381,6 +381,63 @@ pub(super) async fn verify_remote_kernelsu_tmp_capability(
     Ok(())
 }
 
+pub(super) async fn verify_remote_resukisu_tmp_capability(
+    window: &Window,
+    adb_path: &PathBuf,
+    serial: Option<&str>,
+    remote_work_dir: &str,
+) -> Result<(), String> {
+    run_checked_adb(
+        window,
+        adb_path,
+        serial,
+        &[
+            "shell".to_string(),
+            format!(
+                "echo ranran_boot_patch > {dir}/.rw_test && [ -f {dir}/.rw_test ] && echo TMP_WRITE_OK || (echo TMP_WRITE_FAILED && exit 1)",
+                dir = remote_work_dir
+            ),
+        ],
+        "CHK",
+        "检测 /data/local/tmp 可写性失败",
+    )
+    .await?;
+
+    run_checked_adb(
+        window,
+        adb_path,
+        serial,
+        &[
+            "shell".to_string(),
+            format!(
+                "cd {dir} && [ -s ./ksud ] && ls -l ./ksud && echo TMP_BIN_OK || (echo TMP_BIN_MISSING && exit 1)",
+                dir = remote_work_dir
+            ),
+        ],
+        "CHK",
+        "ReSukiSU 修补所需文件不完整或不可执行",
+    )
+    .await?;
+
+    run_checked_adb(
+        window,
+        adb_path,
+        serial,
+        &[
+            "shell".to_string(),
+            format!(
+                "cd {dir} && ./ksud -V >/dev/null 2>&1 && echo KSUD_EXEC_OK || (echo KSUD_EXEC_FAILED && exit 1)",
+                dir = remote_work_dir
+            ),
+        ],
+        "CHK",
+        "ReSukiSU 所需的 ksud 无法在手机端执行，请检查 ABI 匹配或执行权限",
+    )
+    .await?;
+
+    Ok(())
+}
+
 pub(super) async fn verify_remote_kernelsu_inputs(
     window: &Window,
     adb_path: &PathBuf,
@@ -623,6 +680,46 @@ pub(super) fn extract_folkpatch_kit_from_apk(
     for (entry_name, file_name) in &required_assets {
         extract_zip_entry(&mut zip, entry_name, &extract_dir.join(file_name))?;
     }
+
+    for (entry_name, file_name) in &required_libs {
+        extract_zip_entry(&mut zip, entry_name, &extract_dir.join(file_name))?;
+    }
+
+    let mut files = Vec::new();
+    collect_relative_files(&extract_dir, &extract_dir, &mut files)?;
+
+    Ok(ExtractedPatchKit {
+        local_dir: extract_dir,
+        files,
+    })
+}
+
+pub(super) fn extract_resukisu_kit_from_apk(
+    apk_path: &Path,
+    output_root: &Path,
+    device_abi: &str,
+) -> Result<ExtractedPatchKit, String> {
+    if !apk_path.exists() {
+        return Err(format!("ReSukiSU APK 不存在: {}", apk_path.display()));
+    }
+    if !apk_path.is_file() {
+        return Err(format!("ReSukiSU APK 路径不是文件: {}", apk_path.display()));
+    }
+
+    let file = fs::File::open(apk_path).map_err(|e| format!("打开 ReSukiSU APK 失败: {}", e))?;
+    let mut zip = ZipArchive::new(file).map_err(|e| format!("解析 ReSukiSU APK 失败: {}", e))?;
+
+    let lib_folder = normalize_lib_folder(device_abi)?;
+    let required_libs = [(format!("lib/{}/libksud.so", lib_folder), "ksud")];
+
+    for (entry_name, _) in &required_libs {
+        if !apk_entry_exists(&mut zip, entry_name) {
+            return Err(format!("ReSukiSU APK 缺少 ABI 对应二进制: {}", entry_name));
+        }
+    }
+
+    let extract_dir = output_root.join("resukisu-kit");
+    recreate_local_dir(&extract_dir).map_err(|e| format!("创建 ReSukiSU 解包目录失败: {}", e))?;
 
     for (entry_name, file_name) in &required_libs {
         extract_zip_entry(&mut zip, entry_name, &extract_dir.join(file_name))?;

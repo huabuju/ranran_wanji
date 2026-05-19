@@ -75,6 +75,8 @@ pub struct OneKeyRootResponse {
 #[serde(rename_all = "camelCase")]
 pub struct KernelSuRuntimeRequest {
     pub kernel_su_path: String,
+    #[serde(default)]
+    pub patch_mode: String,
 }
 
 #[derive(Debug, Serialize, Clone)]

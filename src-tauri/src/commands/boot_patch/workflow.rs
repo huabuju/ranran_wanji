@@ -28,7 +28,9 @@ pub(super) async fn query_kernelsu_supported_kmis_via_device(
     adb_path: &PathBuf,
     serial: Option<&str>,
     kernel_su_apk_path: &Path,
+    patch_mode: &str,
 ) -> Result<(Vec<String>, String), String> {
+    let is_resukisu = normalize_patch_mode(patch_mode) == PATCH_MODE_RESUKISU;
     let device_abi = read_device_abi(window, adb_path, serial).await?;
     let runtime_suffix = chrono_like_timestamp();
     let local_data_root = window
@@ -41,8 +43,11 @@ pub(super) async fn query_kernelsu_supported_kmis_via_device(
     fs::create_dir_all(&local_data_root)
         .map_err(|e| format!("创建 KernelSU 运行时目录失败: {}", e))?;
 
-    let extract_result =
-        extract_kernelsu_kit_from_apk(kernel_su_apk_path, &local_data_root, &device_abi);
+    let extract_result = if is_resukisu {
+        extract_resukisu_kit_from_apk(kernel_su_apk_path, &local_data_root, &device_abi)
+    } else {
+        extract_kernelsu_kit_from_apk(kernel_su_apk_path, &local_data_root, &device_abi)
+    };
     let extracted = match extract_result {
         Ok(extracted) => extracted,
         Err(error) => {
@@ -74,23 +79,26 @@ pub(super) async fn query_kernelsu_supported_kmis_via_device(
             .await?;
         }
 
+        let chmod_command = if is_resukisu {
+            format!("cd {dir} && chmod 755 ./ksud", dir = remote_work_dir)
+        } else {
+            format!("cd {dir} && chmod 755 ./ksud ./magiskboot", dir = remote_work_dir)
+        };
         run_checked_adb(
             window,
             adb_path,
             serial,
-            &[
-                "shell".to_string(),
-                format!(
-                    "cd {dir} && chmod 755 ./ksud ./magiskboot",
-                    dir = remote_work_dir
-                ),
-            ],
+            &["shell".to_string(), chmod_command],
             "CHK",
             "设置 KernelSU 运行时文件权限失败",
         )
         .await?;
 
-        verify_remote_kernelsu_tmp_capability(window, adb_path, serial, &remote_work_dir).await?;
+        if is_resukisu {
+            verify_remote_resukisu_tmp_capability(window, adb_path, serial, &remote_work_dir).await?;
+        } else {
+            verify_remote_kernelsu_tmp_capability(window, adb_path, serial, &remote_work_dir).await?;
+        }
 
         let output = run_checked_adb(
             window,
@@ -290,8 +298,11 @@ pub(super) async fn patch_boot_image_impl(
                 .join("boot-patch-temp");
             fs::create_dir_all(&local_data_root).map_err(|e| format!("创建本地缓存目录失败: {}", e))?;
 
-            let extracted =
-                extract_kernelsu_kit_from_apk(&kernel_su_apk_path, &local_data_root, &device_abi)?;
+            let extracted = if patch_mode == PATCH_MODE_RESUKISU {
+                extract_resukisu_kit_from_apk(&kernel_su_apk_path, &local_data_root, &device_abi)?
+            } else {
+                extract_kernelsu_kit_from_apk(&kernel_su_apk_path, &local_data_root, &device_abi)?
+            };
             local_cleanup_dirs.push(extracted.local_dir.clone());
 
             emit_log(
@@ -363,18 +374,26 @@ pub(super) async fn patch_boot_image_impl(
             )
             .await?;
 
-            verify_remote_kernelsu_tmp_capability(&window, adb_path, serial_ref, &remote_work_dir)
-                .await?;
-            verify_remote_kernelsu_inputs(&window, adb_path, serial_ref, &remote_work_dir).await?;
+            if patch_mode == PATCH_MODE_RESUKISU {
+                verify_remote_resukisu_tmp_capability(&window, adb_path, serial_ref, &remote_work_dir)
+                    .await?;
+            } else {
+                verify_remote_kernelsu_tmp_capability(&window, adb_path, serial_ref, &remote_work_dir)
+                    .await?;
+                verify_remote_kernelsu_inputs(&window, adb_path, serial_ref, &remote_work_dir).await?;
+            }
 
             let output_file_name = build_patched_output_name(&patch_mode, &boot_path, None);
             let remote_output_path = format!("{}/{}", remote_work_dir, output_file_name);
             let mut patch_command = format!(
-                "cd {dir} && ./ksud boot-patch -b ./boot.img -o . --out-name {out_name} --magiskboot ./magiskboot --partition {partition}",
+                "cd {dir} && ./ksud boot-patch -b ./boot.img -o . --out-name {out_name} --partition {partition}",
                 dir = remote_work_dir,
                 out_name = shell_quote(&output_file_name),
                 partition = shell_quote(&target_partition),
             );
+            if patch_mode != PATCH_MODE_RESUKISU {
+                patch_command.push_str(" --magiskboot ./magiskboot");
+            }
 
             if !request.kernel_su_kmi.trim().is_empty() {
                 patch_command.push_str(" --kmi ");
@@ -890,6 +909,7 @@ pub(super) async fn get_kernelsu_runtime_impl(
             &paths.adb,
             serial_ref,
             &kernel_su_apk_path,
+            &request.patch_mode,
         )
         .await?;
         let fallback_detected_kmi = detect_device_kmi(&paths.adb, serial_ref).await?;
