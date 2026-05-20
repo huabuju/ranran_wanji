@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    title="系统设置"
+    title="应用设置"
     width="620px"
     align-center
     class="app-dialog-shell settings-dialog"

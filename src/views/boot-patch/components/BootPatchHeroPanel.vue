@@ -133,10 +133,26 @@
     >
       <div class="usage-dialog">
         <div class="usage-note">
-          <p>1、如需要扩展可选修补版本，可前往 github-apk 页面/其他途径下载对应root管理软件，并放入对应资源目录下 </p>
+          <p>
+            1、如需要扩展可选修补版本，可前往
+            <RouterLink class="usage-link" to="/github-apk" @click="usageDialogVisible = false">GitHub APK</RouterLink>
+            页面/其他途径下载对应 Root 管理软件，并放入对应资源目录下
+          </p>
           <p>2、应用会自动识别该目录下的资源包；放置完成后重启工具箱即可看到新增版本</p>
-          <p>3、请确保修补版本与手机安装的管理器版本相一致（一键root时请先卸载管理器，避免自动安装失败）</p>
+          <p>3、请确保修补版本与手机安装的管理器版本相一致（一键 Root 时请先卸载管理器，避免自动安装失败）</p>
+          <p>4、常用 Boot 管理器项目地址：</p>
+          <div class="manager-link-list">
+            <template v-for="(item, index) in bootManagerLinks" :key="item.name">
+              <button
+                type="button"
+                class="usage-link manager-link"
+                @click="openExternalLink(item.url)"
+              >
+                {{ item.name }}
+              </button><span v-if="index < bootManagerLinks.length - 1" class="manager-link-separator">、</span>
+            </template>
           </div>
+        </div>
       </div>
     </el-dialog>
   </section>
@@ -144,10 +160,26 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { openUrl } from '@tauri-apps/plugin-opener';
 import SmartIcon from '@/components/common/SmartIcon.vue';
 import BootPatchFormPanel from './BootPatchFormPanel.vue';
 
 const usageDialogVisible = ref(false);
+
+const bootManagerLinks = [
+  { name: 'Magisk', url: 'https://github.com/topjohnwu/Magisk' },
+  { name: 'Magisk-alpha', url: 'https://github.com/vvb2060/Magisk' },
+  { name: 'KernelSU', url: 'https://github.com/tiann/KernelSU' },
+  { name: 'KernelSU-Next', url: 'https://github.com/KernelSU-Next/KernelSU-Next' },
+  { name: 'SukiSU-Ultra', url: 'https://github.com/SukiSU-Ultra/SukiSU-Ultra' },
+  { name: 'ReSukiSU', url: 'https://github.com/ReSukiSU/ReSukiSU' },
+  { name: 'APatch', url: 'https://github.com/bmax121/APatch/' },
+  { name: 'FolkPatch', url: 'https://github.com/LyraVoid/FolkPatch' },
+];
+
+async function openExternalLink(url) {
+  await openUrl(url);
+}
 
 function normalizePatchMode(value) {
   const normalized = String(value || '').trim().toLowerCase();
@@ -661,6 +693,36 @@ function toggleOption(item) {
   color: var(--color-text-secondary);
   font-size: 13px;
   line-height: 28px;
+}
+
+.usage-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.usage-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.manager-link-list {
+  margin-top: 6px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 28px;
+}
+
+.manager-link {
+  line-height: inherit;
+}
+
+.manager-link-separator {
+  color: var(--color-text-secondary);
 }
 
 @media (max-width: 1180px) {

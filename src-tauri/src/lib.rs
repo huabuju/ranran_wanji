@@ -47,37 +47,6 @@ use commands::xiaomirom::{
 use tauri::{Emitter, Manager};
 use utils::process::init_process_tracker;
 
-#[cfg(windows)]
-fn configure_windows_production_webview<R: tauri::Runtime>(
-    webview_window: &tauri::WebviewWindow<R>,
-) {
-    if let Err(error) = webview_window.with_webview(|webview| unsafe {
-        match webview.controller().CoreWebView2() {
-            Ok(core_webview) => match core_webview.Settings() {
-                Ok(settings) => {
-                    if let Err(error) = settings.SetAreDefaultContextMenusEnabled(false) {
-                        eprintln!("failed to disable WebView2 default context menus: {error}");
-                    }
-                }
-                Err(error) => {
-                    eprintln!("failed to get WebView2 settings: {error}");
-                }
-            },
-            Err(error) => {
-                eprintln!("failed to get CoreWebView2 controller: {error}");
-            }
-        }
-    }) {
-        eprintln!("failed to configure production webview: {error}");
-    }
-}
-
-#[cfg(not(windows))]
-fn configure_windows_production_webview<R: tauri::Runtime>(
-    _webview_window: &tauri::WebviewWindow<R>,
-) {
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
@@ -92,12 +61,6 @@ pub fn run() {
             let fastboot = get_fastboot_path(&app_handle);
             let scrcpy = get_scrcpy_path(&app_handle);
             init_process_tracker(&adb);
-
-            if !cfg!(debug_assertions) {
-                if let Some(main_window) = app.get_webview_window("main") {
-                    configure_windows_production_webview(&main_window);
-                }
-            }
 
             // 启动时先显示主窗口，ADB 预热放到后台异步执行，避免启动页等待过久
             let handle_for_init = app_handle.clone();

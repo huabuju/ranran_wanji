@@ -45,7 +45,9 @@
       <div class="guide-section">
         <div class="guide-section-title">常见注意事项</div>
         <ul class="guide-list">
-          <li>若无法识别设备，请优先检查数据线、驱动安装、USB 模式以及开发者选项是否被系统关闭。</li>
+          <li>
+            若无法识别设备，请优先检查数据线、<button class="guide-link-button" type="button" @click="handleOpenDriverFolder">驱动安装</button>、USB 模式以及开发者选项是否被系统关闭。
+          </li>
           <li>若配对或连接失败，可尝试关闭占用 ADB 的第三方手机助手、模拟器或命令行窗口后重试。</li>
           <li>部分品牌系统会限制后台网络发现或调试权限，必要时请重新打开无线调试并重新配对。</li>
           <li>如果更换了 USB 接口、电脑环境或重置了调试授权，可能需要重新授权或重新配对。</li>
@@ -57,12 +59,22 @@
 
 <script setup>
 import { ref } from 'vue';
+import { invoke } from '@tauri-apps/api/core';
 import SmartIcon from '@/components/common/SmartIcon.vue';
 
 const visible = ref(false);
 
 function open() {
   visible.value = true;
+}
+
+async function handleOpenDriverFolder() {
+  try {
+    await invoke('open_driver_folder');
+  } catch (error) {
+    console.error('Failed to open driver folder:', error);
+    ElMessage.error(`打开失败: ${error}`);
+  }
 }
 
 defineExpose({ open });
@@ -154,6 +166,20 @@ defineExpose({ open });
     font-size: 12.5px;
     line-height: 1.75;
     color: var(--color-text-secondary);
+  }
+}
+
+.guide-link-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
   }
 }
 </style>

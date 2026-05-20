@@ -4,9 +4,12 @@ const archiver = require('archiver');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf-8'));
-const updateInfo = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'update.json'), 'utf-8'));
+const buildInfoPath = path.join(ROOT_DIR, 'dist', 'build-info.json');
+const buildInfo = fs.existsSync(buildInfoPath)
+  ? JSON.parse(fs.readFileSync(buildInfoPath, 'utf-8'))
+  : JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'update.json'), 'utf-8'));
 const VERSION = pkg.version;
-const DATE_VERSION = updateInfo.dateVersion;
+const DATE_VERSION = buildInfo.dateVersion;
 const APP_NAME = 'RanranToolkit';
 const EXE_SRC = path.join(ROOT_DIR, 'src-tauri', 'target', 'release', `${APP_NAME}.exe`);
 const BIN_DIR = path.join(ROOT_DIR, 'bin');

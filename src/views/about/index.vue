@@ -39,7 +39,6 @@ import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/core';
 import { ElMessage } from 'element-plus';
 import SponsorDialog from '@/components/about/SponsorDialog.vue';
-import { formatDateTime } from '@/utils/date';
 import { checkUpdate, fetchUpdateInfo } from '@/utils/updater';
 import { useUpdateStore } from '@/utils/updateStore';
 import {
@@ -162,11 +161,7 @@ const refresh = async () => {
 };
 
 function resolveBuildTime() {
-  if (typeof __APP_BUILD_TIME__ !== 'string' || !__APP_BUILD_TIME__) {
-    return '';
-  }
-
-  return formatDateTime(__APP_BUILD_TIME__, 'YYYYMMDDHHmmss');
+  return typeof __APP_DATE_VERSION__ === 'string' ? __APP_DATE_VERSION__ : '';
 }
 
 defineExpose({ refresh });

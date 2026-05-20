@@ -1,6 +1,5 @@
 import { getVersion } from '@tauri-apps/api/app';
 import { invoke } from '@tauri-apps/api/core';
-import { formatDateTime } from './date';
 import { useUpdateStore } from './updateStore';
 
 const { showUpdateDialog, isChecking, updateInfo } = useUpdateStore();
@@ -29,11 +28,7 @@ function isNewerVersion(remote, local) {
 }
 
 function getLocalDateVersion() {
-  if (typeof __APP_BUILD_TIME__ !== 'string' || !__APP_BUILD_TIME__) {
-    return '';
-  }
-
-  return formatDateTime(__APP_BUILD_TIME__, 'YYYYMMDDHHmmss');
+  return typeof __APP_DATE_VERSION__ === 'string' ? __APP_DATE_VERSION__ : '';
 }
 
 function normalizeDateVersion(value) {

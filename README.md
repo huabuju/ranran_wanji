@@ -18,6 +18,19 @@
 - **官方群 (QQ)**: `731971089`
 - **仓库地址**: [Gitee · RanranToolkit](https://gitee.com/xiaowan12/toolkit-tauri-app)
 
+## 🖼️ 宣传海报 (Posters)
+
+<div align="center">
+  <table>
+    <tr>
+      <td width="50%"><img src="pic/ranran-toolkit-functional-poster.png" alt="然然玩机工具箱功能海报" /><br /><sub>功能海报</sub></td>
+      <td width="50%"><img src="pic/ranran-boot-patch-feature-poster.png" alt="Boot 修补功能海报" /><br /><sub>Boot 修补海报</sub></td>
+    </tr>
+  </table>
+</div>
+
+---
+
 ## 🖼️ 界面预览 (Screenshots)
 
 <div align="center">

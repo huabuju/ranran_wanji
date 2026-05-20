@@ -6,6 +6,10 @@ import ElementPlus from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import "dayjs/locale/zh-cn";
 
+document.addEventListener('contextmenu', (event) => {
+  event.preventDefault();
+});
+
 const app = createApp(App);
 
 app

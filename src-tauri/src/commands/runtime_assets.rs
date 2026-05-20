@@ -626,7 +626,6 @@ pub async fn prepare_runtime_assets(app: AppHandle) -> Result<RuntimeAssetsResul
             runtime_dir,
         });
 
-        crate::commands::system::force_stop_runtime_processes(&app);
         emit_progress(
             &app,
             "check",
