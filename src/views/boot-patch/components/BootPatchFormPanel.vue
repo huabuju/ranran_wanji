@@ -146,8 +146,6 @@
                   选择
                 </el-button>
               </div>
-
-              <p class="field-tip">如果先选择了 Boot 文件，默认会自动带出同级目录作为输出位置。</p>
             </div>
 
             <!-- <div v-if="outputDir" class="field-preview">

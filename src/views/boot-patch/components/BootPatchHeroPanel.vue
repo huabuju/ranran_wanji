@@ -149,7 +149,7 @@
             </button>
             ；放置完成后重启工具箱即可看到新增版本
           </p>
-          <p>3、请确保修补版本与手机安装的管理器版本相一致（一键 Root 时请先卸载管理器，避免自动安装失败）</p>
+          <p>3、请确保修补版本与手机安装的管理器版本相一致（一键 Root 时请先卸载管理器，避免自动安装失败），如手动选择本地boot等镜像，需要确保文件名即为标准分区名（不带插槽名字）</p>
           <p>4、常用 Boot 管理器项目地址：</p>
           <div class="manager-link-list">
             <template v-for="(item, index) in bootManagerLinks" :key="item.name">
