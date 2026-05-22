@@ -11,7 +11,7 @@
                 </div>
                 <div class="field-copy">
                   <div class="field-copy__title">
-                    <span>Boot 文件 / 官方链接</span>
+                    <span>Boot 文件 / 官方链接（可自动识别/不填）</span>
                     <el-tooltip
                       placement="bottom-start"
                       effect="light"

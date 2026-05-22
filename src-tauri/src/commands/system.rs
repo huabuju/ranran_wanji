@@ -148,8 +148,21 @@ pub fn open_driver_folder(paths: State<'_, AppPaths>) -> Result<(), String> {
 }
 
 // ==============================
-// Command: 打开工具依赖包文件夹
+// Command: 打开工具资源包文件夹
 // ==============================
+// Command: 打开工具资源包文件夹
+#[tauri::command]
+pub fn open_boot_patch_folder(paths: State<'_, AppPaths>) -> Result<(), String> {
+    let bin_dir = paths
+        .adb
+        .parent()
+        .and_then(|p| p.parent())
+        .ok_or_else(|| "无法获取 bin 目录".to_string())?;
+
+    let boot_patch_path = bin_dir.join("boot-patch");
+    open_folder_in_explorer(&boot_patch_path, "Boot 修补资源文件夹")
+}
+
 #[tauri::command]
 pub fn open_tool_dependency_folder(paths: State<'_, AppPaths>) -> Result<(), String> {
     let dependency_path = paths
@@ -158,7 +171,7 @@ pub fn open_tool_dependency_folder(paths: State<'_, AppPaths>) -> Result<(), Str
         .and_then(|p| p.parent())
         .ok_or_else(|| "无法获取工具依赖目录".to_string())?;
 
-    open_folder_in_explorer(dependency_path, "依赖包文件夹")
+    open_folder_in_explorer(dependency_path, "资源包文件夹")
 }
 
 #[tauri::command]

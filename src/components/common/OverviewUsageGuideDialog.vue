@@ -36,7 +36,11 @@
         <ul class="guide-list">
           <li>手机已开启开发者选项（Developer Options）。</li>
           <li>已开启 USB 调试（USB Debugging），部分机型还需要额外开启“无线调试”。</li>
-          <li>电脑已正确安装 ADB / Fastboot 驱动，设备管理器中不能出现异常驱动项。</li>
+          <li>
+            电脑已正确
+            <button class="guide-link-button" type="button" @click="handleOpenDriverFolder">安装 ADB / Fastboot 驱动</button>
+            ，设备管理器中不能出现异常驱动项。
+          </li>
           <li>建议优先使用稳定的数据线和主板直连 USB 接口，避免识别不稳定。</li>
           <li>手机首次连接电脑时，需要在设备端同意 USB 调试授权提示。</li>
         </ul>
@@ -46,7 +50,7 @@
         <div class="guide-section-title">常见注意事项</div>
         <ul class="guide-list">
           <li>
-            若无法识别设备，请优先检查数据线、<button class="guide-link-button" type="button" @click="handleOpenDriverFolder">驱动安装</button>、USB 模式以及开发者选项是否被系统关闭。
+            若无法识别设备，请优先检查数据线、驱动安装、USB 模式以及开发者选项是否被系统关闭。
           </li>
           <li>若配对或连接失败，可尝试关闭占用 ADB 的第三方手机助手、模拟器或命令行窗口后重试。</li>
           <li>部分品牌系统会限制后台网络发现或调试权限，必要时请重新打开无线调试并重新配对。</li>

@@ -138,7 +138,17 @@
             <RouterLink class="usage-link" to="/github-apk" @click="usageDialogVisible = false">GitHub APK</RouterLink>
             页面/其他途径下载对应 Root 管理软件，并放入对应资源目录下
           </p>
-          <p>2、应用会自动识别该目录下的资源包；放置完成后重启工具箱即可看到新增版本</p>
+          <p>
+            2、应用会自动识别对应
+            <button
+              type="button"
+              class="usage-link"
+              @click="handleOpenBootPatchFolder"
+            >
+              目录下的资源包
+            </button>
+            ；放置完成后重启工具箱即可看到新增版本
+          </p>
           <p>3、请确保修补版本与手机安装的管理器版本相一致（一键 Root 时请先卸载管理器，避免自动安装失败）</p>
           <p>4、常用 Boot 管理器项目地址：</p>
           <div class="manager-link-list">
@@ -160,6 +170,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { invoke } from '@tauri-apps/api/core';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import SmartIcon from '@/components/common/SmartIcon.vue';
 import BootPatchFormPanel from './BootPatchFormPanel.vue';
@@ -179,6 +190,15 @@ const bootManagerLinks = [
 
 async function openExternalLink(url) {
   await openUrl(url);
+}
+
+async function handleOpenBootPatchFolder() {
+  try {
+    await invoke('open_boot_patch_folder');
+  } catch (error) {
+    console.error('Failed to open boot patch folder:', error);
+    ElMessage.error(`打开失败: ${error}`);
+  }
 }
 
 function normalizePatchMode(value) {

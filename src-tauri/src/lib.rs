@@ -36,7 +36,7 @@ use commands::miuier::{fetch_miuier_catalog, fetch_miuier_model_roms};
 use commands::rom_data::generate_codename_model_map;
 use commands::runtime_assets::{get_tool_runtime_path, prepare_runtime_assets, warmup_platform_tools};
 use commands::system::{
-    clear_tool_cache, get_online_update_json, open_device_manager, open_driver_folder,
+    clear_tool_cache, get_online_update_json, open_boot_patch_folder, open_device_manager, open_driver_folder,
     open_folder_path, open_platform_tools_cmd, open_tool_dependency_folder, restart_app,
     start_scrcpy, stop_scrcpy, ExitCleanupState,
 };
@@ -100,6 +100,7 @@ pub fn run() {
             open_device_manager,
             start_scrcpy,
             stop_scrcpy,
+            open_boot_patch_folder,
             open_driver_folder,
             open_folder_path,
             open_tool_dependency_folder,

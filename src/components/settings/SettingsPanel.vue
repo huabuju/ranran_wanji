@@ -51,17 +51,8 @@ const { stopPolling, startPolling } = useDeviceStore();
 
 const settingItems = [
   {
-    key: 'driver-folder',
-    title: '查看 / 安装驱动',
-    description: '打开包含 ADB 与 Fastboot 驱动的本地文件夹',
-    actionText: '打开文件夹',
-    icon: 'tool',
-    color: '#705cff',
-    action: handleOpenDriverFolder,
-  },
-  {
     key: 'dependency-folder',
-    title: '打开依赖包文件夹',
+    title: '打开资源包文件夹',
     description: '查看当前程序依赖目录，包含 platform-tools、scrcpy-core、aria2-core 等组件',
     actionText: '打开文件夹',
     icon: 'folder',
@@ -79,15 +70,6 @@ const settingItems = [
     danger: true,
   },
 ];
-
-async function handleOpenDriverFolder() {
-  try {
-    await invoke('open_driver_folder');
-  } catch (error) {
-    console.error('Failed to open driver folder:', error);
-    ElMessage.error(`打开失败: ${error}`);
-  }
-}
 
 async function handleOpenToolDependencyFolder() {
   try {
