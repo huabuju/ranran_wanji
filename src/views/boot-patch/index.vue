@@ -84,6 +84,7 @@ const patching = ref(false);
 const rooting = ref(false);
 const defaultOutputDir = ref('');
 const floatingLogRef = ref(null);
+const skipNextKernelSuRuntimeAutoRefresh = ref(false);
 let unlistenLog = null;
 
 const {
@@ -135,6 +136,9 @@ workflowApi = useBootPatchWorkflow({
   getDefaultKernelSuToolPath,
   getEffectivePatchToolPath,
   getInitialPatchMode,
+  onRootRebooted: () => {
+    skipNextKernelSuRuntimeAutoRefresh.value = true;
+  },
 });
 
 const {
@@ -265,8 +269,15 @@ watch(() => form.kernelSuPath, () => {
   void refreshKernelSuRuntime();
 });
 
-watch(selectedSerial, () => {
-  if (!isKernelSuMode(form.patchMode) || patching.value || rooting.value) {
+watch(selectedSerial, (nextSerial) => {
+  if (!nextSerial || !isKernelSuMode(form.patchMode)) {
+    return;
+  }
+  if (skipNextKernelSuRuntimeAutoRefresh.value) {
+    skipNextKernelSuRuntimeAutoRefresh.value = false;
+    return;
+  }
+  if (patching.value || rooting.value) {
     return;
   }
   void refreshKernelSuRuntime({ silent: true });

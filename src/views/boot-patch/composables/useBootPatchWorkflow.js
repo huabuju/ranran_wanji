@@ -36,6 +36,7 @@ export function useBootPatchWorkflow({
   getDefaultKernelSuToolPath,
   getEffectivePatchToolPath,
   getInitialPatchMode,
+  onRootRebooted,
 }) {
   const logs = ref([]);
   const status = ref('idle');
@@ -608,6 +609,9 @@ export function useBootPatchWorkflow({
       });
 
       const isKernelSuRoot = isKernelSuMode(form.patchMode);
+      if (isKernelSuRoot) {
+        onRootRebooted?.();
+      }
       const isApatchRoot = isApatchMode(form.patchMode);
       const rootManagerLabel = getRootManagerLabel(form.patchMode);
       const installSucceeded = isKernelSuRoot
