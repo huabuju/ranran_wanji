@@ -1,6 +1,9 @@
-use crate::adb::core::{adb_run_async_with_serial, create_hidden_async_command, AppPaths};
+use crate::adb::core::{
+    adb_pull_to_local_file, adb_run_async_with_serial, create_hidden_async_command, AppPaths,
+};
 use crate::utils::process::{output_tracked_async_command, PROCESS_KIND_ADB_CLIENT};
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 use tauri::State;
 
 // ==============================
@@ -273,33 +276,15 @@ pub async fn adb_pull_file(
     local_path: String,
 ) -> Result<String, String> {
     let serial_str = serial.unwrap_or_default();
-    let mut args: Vec<String> = Vec::new();
-
-    if !serial_str.is_empty() {
-        args.push("-s".to_string());
-        args.push(serial_str.clone());
-    }
-
-    args.push("pull".to_string());
-    args.push(remote_path.clone());
-    args.push(local_path.clone());
-
-    let args_ref: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
-
-    let mut command = create_hidden_async_command(&paths.adb);
-    let output = output_tracked_async_command(command.args(&args_ref), PROCESS_KIND_ADB_CLIENT)
-        .await
-        .map_err(|e| format!("执行 adb pull 失败: {}", e))?;
-
-    let stdout = String::from_utf8_lossy(&output.stdout).trim().to_string();
-    let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
-
-    if !output.status.success() && stderr.contains("error") {
-        return Err(format!("pull 失败: {}", stderr));
-    }
-
-    let result = if stdout.is_empty() { stderr } else { stdout };
-    Ok(result)
+    let local_path = PathBuf::from(local_path.trim());
+    adb_pull_to_local_file(
+        &paths.adb,
+        Some(serial_str.as_str()).filter(|value| !value.is_empty()),
+        &remote_path,
+        &local_path,
+    )
+    .await
+    .map_err(|e| format!("pull 失败: {}", e))
 }
 
 // ==============================

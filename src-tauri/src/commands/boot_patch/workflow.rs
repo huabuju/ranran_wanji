@@ -423,19 +423,17 @@ pub(super) async fn patch_boot_image_impl(
                 "info",
                 "PULL",
             );
-            run_checked_adb(
-                &window,
+            let pull_output = adb_pull_to_local_file(
                 adb_path,
                 serial_ref,
-                &[
-                    "pull".to_string(),
-                    remote_output_path,
-                    local_output_path.to_string_lossy().to_string(),
-                ],
-                "PULL",
-                &format!("拉回 {} patched 镜像失败", patch_label),
+                &remote_output_path,
+                &local_output_path,
             )
-            .await?;
+            .await
+            .map_err(|e| format!("拉回 {} patched 镜像失败: {}", patch_label, e))?;
+            if !pull_output.trim().is_empty() {
+                emit_log(&window, pull_output, "info", "PULL");
+            }
 
             if !local_output_path.exists() {
                 return Err(format!("{} patched 镜像拉回完成，但本地未找到输出文件", patch_label));
@@ -807,19 +805,17 @@ pub(super) async fn patch_boot_image_impl(
             "info",
             "PULL",
         );
-        run_checked_adb(
-            &window,
+        let pull_output = adb_pull_to_local_file(
             adb_path,
             serial_ref,
-            &[
-                "pull".to_string(),
-                remote_output_path,
-                local_output_path.to_string_lossy().to_string(),
-            ],
-            "PULL",
-            "拉回 patched 镜像失败",
+            &remote_output_path,
+            &local_output_path,
         )
-        .await?;
+        .await
+        .map_err(|e| format!("拉回 patched 镜像失败: {}", e))?;
+        if !pull_output.trim().is_empty() {
+            emit_log(&window, pull_output, "info", "PULL");
+        }
 
         if !local_output_path.exists() {
             return Err("patched 镜像拉回完成，但本地未找到输出文件".to_string());

@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::os::windows::process::CommandExt;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::{Command as StdCommand, Output};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Mutex, OnceLock};
@@ -331,6 +331,51 @@ pub async fn adb_run_async_with_serial_combined(
         adb_run_async_combined(adb, &full_args).await
     } else {
         adb_run_async_combined(adb, args).await
+    }
+}
+
+pub async fn adb_pull_to_local_file(
+    adb: &PathBuf,
+    serial: Option<&str>,
+    remote_path: &str,
+    local_path: &Path,
+) -> Result<String, String> {
+    let local_dir = local_path
+        .parent()
+        .ok_or_else(|| "本地保存路径缺少目录".to_string())?;
+    let local_file_name = local_path
+        .file_name()
+        .and_then(|value| value.to_str())
+        .filter(|value| !value.trim().is_empty())
+        .ok_or_else(|| "本地保存路径缺少文件名".to_string())?;
+
+    let mut command = create_hidden_async_command(adb);
+    command.current_dir(local_dir);
+
+    if let Some(serial) = serial.filter(|value| !value.is_empty()) {
+        command.arg("-s").arg(serial);
+    }
+
+    let output = output_tracked_async_command(
+        command.arg("pull").arg(remote_path).arg(local_file_name),
+        PROCESS_KIND_ADB_CLIENT,
+    )
+    .await
+    .map_err(|e| format!("执行 adb pull 失败: {}", e))?;
+
+    let stdout = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
+
+    if output.status.success() {
+        Ok(if stdout.is_empty() { stderr } else { stdout })
+    } else if !stderr.is_empty() && !stdout.is_empty() {
+        Err(format!("{}\n{}", stderr, stdout))
+    } else if !stderr.is_empty() {
+        Err(stderr)
+    } else if !stdout.is_empty() {
+        Err(stdout)
+    } else {
+        Err(format!("adb 退出码: {:?}", output.status.code()))
     }
 }
 

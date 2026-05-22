@@ -1,8 +1,10 @@
 use crate::adb::core::{
-    adb_run_async_with_serial, create_hidden_async_command, get_tool_path, AppPaths,
+    adb_pull_to_local_file, adb_run_async_with_serial, create_hidden_async_command, get_tool_path,
+    AppPaths,
 };
 use crate::utils::process::{output_tracked_async_command, PROCESS_KIND_ADB_CLIENT};
 use crate::models::device_info::{AppLabelEntry, PackageInfo};
+use std::path::PathBuf;
 use tauri::{AppHandle, State};
 
 // ==============================
@@ -535,10 +537,11 @@ pub async fn extract_apk(
     };
 
     if device_paths.len() == 1 {
-        adb_run_async_with_serial(
+        adb_pull_to_local_file(
             &paths.adb,
             sr,
-            &["pull", &device_paths[0], &actual_save_path],
+            &device_paths[0],
+            &PathBuf::from(&actual_save_path),
         )
         .await
         .map_err(|e| format!("提取 APK 失败: {}", e))?;
@@ -558,13 +561,9 @@ pub async fn extract_apk(
             .to_string();
         let local_path = tmp_dir.join(&file_name);
 
-        adb_run_async_with_serial(
-            &paths.adb,
-            sr,
-            &["pull", device_path, local_path.to_string_lossy().as_ref()],
-        )
-        .await
-        .map_err(|e| format!("拉取 {} 失败: {}", file_name, e))?;
+        adb_pull_to_local_file(&paths.adb, sr, device_path, &local_path)
+            .await
+            .map_err(|e| format!("拉取 {} 失败: {}", file_name, e))?;
 
         pulled_files.push((file_name, local_path));
     }

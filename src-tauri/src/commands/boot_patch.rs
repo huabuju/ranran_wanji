@@ -6,9 +6,9 @@ use super::xiaomirom::{
     XiaomiRomEntry,
 };
 use crate::adb::core::{
-    acquire_fastboot_command_guard, create_hidden_async_command, create_hidden_command,
-    detect_device_state, dump_props_async_with_serial, get_bin_root_dir, get_link_dumper_path,
-    AppPaths,
+    acquire_fastboot_command_guard, adb_pull_to_local_file, create_hidden_async_command,
+    create_hidden_command, detect_device_state, dump_props_async_with_serial, get_bin_root_dir,
+    get_link_dumper_path, AppPaths,
 };
 use crate::utils::process::{
     output_tracked_async_command, spawn_tracked_async_command, wait_tracked_async_child,
