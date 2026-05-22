@@ -64,7 +64,7 @@ defineProps({
 }
 
 .app-name {
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--color-text-primary);
   margin-bottom: 8px;

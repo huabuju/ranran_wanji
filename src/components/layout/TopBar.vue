@@ -14,13 +14,10 @@
         @click="emit('usage-guide')"
       >
         <span class="icon-slot" aria-hidden="true">
-          <SmartIcon
-            name="notification"
-            color="currentColor"
-            :size="13"
-            :show-background="false"
-            :show-decoration="false"
-          />
+          <svg class="titlebar-icon" viewBox="0 0 16 16" focusable="false">
+            <path d="M12.25 6.75a4.25 4.25 0 0 0-8.5 0c0 4.25-1.75 5.5-1.75 5.5h12s-1.75-1.25-1.75-5.5" />
+            <path d="M9.25 14a1.5 1.5 0 0 1-2.5 0" />
+          </svg>
         </span>
       </button>
 
@@ -34,11 +31,11 @@
           @click.stop="toggleMenu"
         >
           <span class="icon-slot" aria-hidden="true">
-            <span class="menu-lines">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
+            <svg class="titlebar-icon" viewBox="0 0 16 16" focusable="false">
+              <path d="M3 4.5h10" />
+              <path d="M3 8h10" />
+              <path d="M3 11.5h10" />
+            </svg>
           </span>
         </button>
 
@@ -58,7 +55,9 @@
           @click="handleWindowMinimize"
         >
           <span class="icon-slot" aria-hidden="true">
-            <span class="window-glyph window-glyph--minimize"></span>
+            <svg class="titlebar-icon" viewBox="0 0 16 16" focusable="false">
+              <path d="M3 11.5h10" />
+            </svg>
           </span>
         </button>
         <button
@@ -69,7 +68,10 @@
           @click="handleWindowClose"
         >
           <span class="icon-slot" aria-hidden="true">
-            <span class="window-glyph window-glyph--close"></span>
+            <svg class="titlebar-icon" viewBox="0 0 16 16" focusable="false">
+              <path d="M4 4l8 8" />
+              <path d="M12 4l-8 8" />
+            </svg>
           </span>
         </button>
       </div>
@@ -80,7 +82,6 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { getCurrentWindow } from '@tauri-apps/api/window';
-import SmartIcon from '@/components/common/SmartIcon.vue';
 import TopBarMenuPanel from '@/components/layout/TopBarMenuPanel.vue';
 import { restartApplication } from '@/api/device';
 
@@ -299,7 +300,7 @@ async function handleMenuSelect(item) {
   cursor: pointer;
   transition: background-color 0.14s ease, color 0.14s ease, opacity 0.14s ease;
   flex-shrink: 0;
-  color: var(--color-text-secondary);
+  color: color-mix(in srgb, var(--color-text-secondary) 78%, transparent);
 }
 
 .icon-button:hover,
@@ -324,45 +325,15 @@ async function handleMenuSelect(item) {
   flex-shrink: 0;
 }
 
-.icon-slot :deep(.smart-icon-container) {
-  width: 16px !important;
-  height: 16px !important;
-  min-width: 16px;
-  min-height: 16px;
-  color: currentColor !important;
-}
-
-.icon-slot :deep(.smart-icon-svg) {
-  width: 16px !important;
-  height: 16px !important;
-}
-
-.menu-lines {
-  position: relative;
+.titlebar-icon {
   width: 16px;
   height: 16px;
   display: block;
-
-  span {
-    position: absolute;
-    left: 1px;
-    right: 1px;
-    height: 2px;
-    border-radius: 999px;
-    background: currentColor;
-  }
-
-  span:nth-child(1) {
-    top: 3px;
-  }
-
-  span:nth-child(2) {
-    top: 7px;
-  }
-
-  span:nth-child(3) {
-    top: 11px;
-  }
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .window-actions {
@@ -370,45 +341,6 @@ async function handleMenuSelect(item) {
   align-items: center;
   gap: 0;
   margin-left: 2px;
-}
-
-.window-glyph {
-  position: relative;
-  display: block;
-  width: 16px;
-  height: 16px;
-  color: currentColor;
-  flex-shrink: 0;
-}
-
-.window-glyph--minimize::before {
-  content: '';
-  position: absolute;
-  left: 2px;
-  right: 2px;
-  bottom: 4px;
-  height: 1.5px;
-  background: currentColor;
-}
-
-.window-glyph--close::before,
-.window-glyph--close::after {
-  content: '';
-  position: absolute;
-  left: 7px;
-  top: 1px;
-  width: 1.4px;
-  height: 14px;
-  background: currentColor;
-  border-radius: 999px;
-}
-
-.window-glyph--close::before {
-  transform: rotate(45deg);
-}
-
-.window-glyph--close::after {
-  transform: rotate(-45deg);
 }
 
 .top-bar.is-focused {
