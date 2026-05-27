@@ -376,6 +376,22 @@ defineExpose({ refresh });
   flex-shrink: 0;
 }
 
+.top-row > :nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.top-row > :nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.top-row > :nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.device-control-page > :last-child {
+  --page-enter-delay: 120ms;
+}
+
 .device-control-page > :first-child {
   margin-top: 4px;
 }

@@ -451,6 +451,7 @@ function toggleOption(item) {
   align-items: flex-start;
   padding: 10px 14px;
   gap: 12px;
+  --page-enter-delay: 0ms;
 }
 
 .hero-chip {
@@ -499,6 +500,7 @@ function toggleOption(item) {
 .hero-main {
   display: flex;
   flex-direction: column;
+  --page-enter-delay: 40ms;
   @include pageCard.overview-main-card-hoverable(var(--bg-glass), null);
 }
 
@@ -513,6 +515,7 @@ function toggleOption(item) {
 
 .hero-aside {
   display: flex;
+  --page-enter-delay: 80ms;
   @include pageCard.overview-main-card-hoverable(var(--bg-glass), null);
 }
 
@@ -581,7 +584,24 @@ function toggleOption(item) {
   border: 1px solid color-mix(in srgb, var(--border-soft) 82%, var(--border-strong) 18%);
   background: color-mix(in srgb, var(--surface-panel) 92%, var(--surface-panel-strong) 8%);
   cursor: pointer;
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 300ms);
   transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease, opacity 0.24s ease, background 0.24s ease;
+}
+
+.hero-checklist > :nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.hero-checklist > :nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.hero-checklist > :nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.hero-checklist > :nth-child(4) {
+  --page-enter-delay: 120ms;
 }
 
 .check-card:hover {

@@ -102,6 +102,30 @@ defineEmits(['show-add', 'cancel-task', 'open-file', 'open-folder', 'retry-task'
   @include pageCard.overview-main-card-hoverable(var(--bg-glass), null);
 }
 .card-list { display: flex; flex-direction: column; gap: 12px; }
+
+.dl-card-wrapper {
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 340ms);
+}
+
+.dl-card-wrapper:nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.dl-card-wrapper:nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.dl-card-wrapper:nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.dl-card-wrapper:nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.dl-card-wrapper:nth-child(5) {
+  --page-enter-delay: 160ms;
+}
 .dl-card { background: var(--surface-elevated); border-radius: var(--radius-md); padding: 16px; border: 1px solid var(--color-divider); display: flex; gap: 16px; transition: all 0.3s ease; position: relative; overflow: hidden;
   &::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px; background: transparent; transition: background 0.3s; }
   &:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hover); border-color: rgba(var(--color-primary-rgb), 0.18); background: var(--surface-elevated-strong); &::before { background: var(--color-primary); } .action-btns:not(.show-always) { opacity: 1; transform: translateX(0); } }

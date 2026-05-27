@@ -32,7 +32,7 @@
           v-for="(item, rowIndex) in column"
           :key="item.key || item.label"
           class="report-info-item"
-          :style="{ '--enter-delay': `${(columnIndex * column.length + rowIndex) * 18}ms` }"
+          :style="{ '--enter-delay': `${(columnIndex * column.length + rowIndex) * 40}ms` }"
         >
           <span class="report-item-name">{{ item.label }}</span>
           <strong class="report-value" :title="item.currentValue">{{ item.currentValue }}</strong>

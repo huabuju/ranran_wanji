@@ -71,7 +71,32 @@ defineEmits(['copy-url', 'download']);
 .rom-card {
   background: var(--bg-glass); backdrop-filter: var(--blur-glass); border: 1px solid var(--color-border); border-radius: var(--radius-md);
   padding: 24px 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow-card);
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 340ms);
   @include pageCard.overview-main-card-hoverable(var(--bg-glass));
+}
+
+.rom-card:nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.rom-card:nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.rom-card:nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.rom-card:nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.rom-card:nth-child(5) {
+  --page-enter-delay: 160ms;
+}
+
+.rom-card:nth-child(6) {
+  --page-enter-delay: 200ms;
 }
 .rom-version { font-size: 14px; font-weight: 700; color: var(--color-text-primary); font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace; }
 .rom-name { font-size: 12px; color: var(--color-text-secondary); min-height: 18px; }
@@ -94,10 +119,31 @@ defineEmits(['copy-url', 'download']);
 .rom-list { display: flex; flex-direction: column; gap: 6px; }
 .rom-list-item {
   background: var(--bg-card); border: 1px solid var(--color-divider); border-radius: var(--radius-sm); padding: 10px 16px; display: flex; align-items: center; gap: 16px;
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 320ms);
   @include pageCard.overview-main-card-hoverable(var(--bg-card));
   .list-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; flex-wrap: wrap; }
   .list-version { font-size: 13px; font-weight: 700; color: var(--color-text-primary); font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace; }
   .list-name { font-size: 12px; color: var(--color-text-secondary); }
   .list-actions { flex-shrink: 0; }
+}
+
+.rom-list-item:nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.rom-list-item:nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.rom-list-item:nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.rom-list-item:nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.rom-list-item:nth-child(5) {
+  --page-enter-delay: 160ms;
 }
 </style>

@@ -33,7 +33,32 @@ defineEmits(['select-brand']);
   flex-direction: column;
   gap: 12px;
   box-shadow: var(--shadow-card);
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 340ms);
   @include pageCard.overview-main-card-hoverable(var(--bg-glass));
+}
+
+.brand-card:nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.brand-card:nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.brand-card:nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.brand-card:nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.brand-card:nth-child(5) {
+  --page-enter-delay: 160ms;
+}
+
+.brand-card:nth-child(6) {
+  --page-enter-delay: 200ms;
 }
 .brand-icon {
   width: 28px; height: 28px; background: var(--color-primary-light); border-radius: 8px;

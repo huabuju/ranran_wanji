@@ -60,7 +60,7 @@
           v-for="(item, index) in baseItems"
           :key="item.key || item.label"
           class="base-info-row"
-          :style="{ '--enter-delay': `${index * 30}ms` }"
+          :style="{ '--enter-delay': `${index * 40}ms` }"
         >
           <span class="base-info-label">{{ item.label }}</span>
           <strong class="base-info-value" :title="item.value">{{ item.value }}</strong>
@@ -139,7 +139,7 @@ defineEmits(['reboot', 'wireless-adb']);
 const getResourceMetricVars = (metric, index = 0) => ({
   '--summary-resource-accent': metric.color,
   '--summary-resource-accent-soft': metric.accent,
-  '--enter-delay': `${index * 30}ms`,
+  '--enter-delay': `${index * 40}ms`,
 });
 </script>
 

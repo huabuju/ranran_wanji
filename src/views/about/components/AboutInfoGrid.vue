@@ -66,12 +66,29 @@ const getInfoCardVars = (card) => ({
   cursor: pointer;
   position: relative;
   box-shadow: var(--shadow-card);
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 340ms);
   @include pageCard.overview-main-card-hoverable(var(--bg-glass));
 
   &:hover .external-icon {
     opacity: 0.7;
     transform: rotate(-45deg) translateY(-1px);
   }
+}
+
+.info-card:nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.info-card:nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.info-card:nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.info-card:nth-child(4) {
+  --page-enter-delay: 120ms;
 }
 
 .card-icon {

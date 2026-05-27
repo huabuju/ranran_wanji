@@ -13,6 +13,7 @@
   gap: 12px;
   box-shadow: var(--shadow-card);
   min-width: 0;
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 340ms);
   @include pageCard.overview-main-card-hoverable(var(--bg-glass));
 
   &.is-batch-mode {

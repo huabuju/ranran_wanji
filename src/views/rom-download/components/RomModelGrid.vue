@@ -37,7 +37,32 @@ defineEmits(['select-model']);
   flex-direction: column;
   gap: 10px;
   box-shadow: var(--shadow-card);
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 340ms);
   @include pageCard.overview-main-card-hoverable(var(--bg-glass));
+}
+
+.model-card:nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.model-card:nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.model-card:nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.model-card:nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.model-card:nth-child(5) {
+  --page-enter-delay: 160ms;
+}
+
+.model-card:nth-child(6) {
+  --page-enter-delay: 200ms;
 }
 .model-header { display: flex; align-items: center; gap: 8px; }
 .model-name { font-size: 14px; font-weight: 700; color: var(--color-text-primary); }

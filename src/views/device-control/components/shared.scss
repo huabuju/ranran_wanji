@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-card);
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 360ms);
   @include pageCard.overview-main-card-hoverable(var(--bg-glass));
 
   &__header {

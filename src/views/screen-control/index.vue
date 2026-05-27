@@ -73,6 +73,8 @@ defineExpose({ refresh });
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/styles/_page-card.scss' as pageCard;
+
 .screen-control-container {
   min-height: 100%;
   display: flex;
@@ -81,13 +83,13 @@ defineExpose({ refresh });
   padding: 4px 0;
   overflow: visible;
   background: transparent;
-  animation: page-fade-in 0.5s ease-out;
 }
 
 .control-layout {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 18px;
+  align-items: stretch;
 }
 
 .left-column,
@@ -100,37 +102,20 @@ defineExpose({ refresh });
 
 .left-column > *,
 .right-column > * {
-  animation: card-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 340ms);
 }
 
 .left-column > *:nth-child(1) {
-  animation-delay: 0.08s;
+  --page-enter-delay: 0ms;
 }
 .left-column > *:nth-child(2) {
-  animation-delay: 0.18s;
+  --page-enter-delay: 40ms;
+}
+.left-column > *:nth-child(3) {
+  --page-enter-delay: 80ms;
 }
 .right-column > *:nth-child(1) {
-  animation-delay: 0.14s;
-}
-
-@keyframes page-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes card-rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  --page-enter-delay: 120ms;
 }
 
 @media (max-width: 900px) {
@@ -144,6 +129,7 @@ defineExpose({ refresh });
   .left-column > *,
   .right-column > * {
     animation: none !important;
+    transition: none !important;
   }
 }
 </style>

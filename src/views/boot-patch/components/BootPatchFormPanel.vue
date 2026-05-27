@@ -444,6 +444,8 @@ function handleToolChange(value) {
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/styles/_page-card.scss' as pageCard;
+
 .boot-form-panel {
   padding: 12px;
   box-sizing: border-box;
@@ -471,6 +473,7 @@ function handleToolChange(value) {
   border-radius: 20px;
   background: var(--surface-panel);
   border: 1px solid var(--border-soft);
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 320ms);
   transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
 }
 
@@ -767,6 +770,27 @@ function handleToolChange(value) {
   padding: 10px;
   box-sizing: border-box;
   gap: 12px;
+  @include pageCard.toolkit-page-enter(160ms, 340ms);
+}
+
+.field-grid > :nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.field-grid > :nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.field-grid > :nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.field-grid > :nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.field-grid > :nth-child(5) {
+  --page-enter-delay: 160ms;
 }
 
 .actions {

@@ -18,3 +18,33 @@
     @include overview-main-card-hover($background, $borderColor);
   }
 }
+
+@keyframes toolkit-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@mixin toolkit-page-enter(
+  $delay: var(--page-enter-delay, 0ms),
+  $duration: 320ms,
+  $timing: ease-out
+) {
+  animation: toolkit-page-enter $duration $timing both;
+  animation-delay: $delay;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@function toolkit-enter-delay($index, $step: 40ms, $start: 0ms) {
+  @return $start + ($index * $step);
+}

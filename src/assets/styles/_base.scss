@@ -1,3 +1,5 @@
+@use './_page-card.scss' as pageCard;
+
 /* ===== Reset & Base ===== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -288,6 +290,7 @@ body {
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
+  @include pageCard.toolkit-page-enter();
 }
 
 .surface-card-strong {
@@ -297,6 +300,7 @@ body {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   overflow: hidden;
+  @include pageCard.toolkit-page-enter();
 }
 
 .page-toolbar,
@@ -465,4 +469,102 @@ body {
 .page-table-inner {
   flex: 1;
   background: var(--bg-card);
+}
+
+/* ===== Page Motion ===== */
+.page-content > * {
+  --page-enter-step: 40ms;
+}
+
+.page-content > * > * {
+  @include pageCard.toolkit-page-enter();
+}
+
+.page-content > * > :nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.page-content > * > :nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.page-content > * > :nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.page-content > * > :nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.page-content > * > :nth-child(5) {
+  --page-enter-delay: 160ms;
+}
+
+.page-content > * > :nth-child(6) {
+  --page-enter-delay: 200ms;
+}
+
+.page-content > * > :where(
+  .top-row,
+  .main-split-container,
+  .main-body,
+  .content-area,
+  .control-layout,
+  .left-column,
+  .right-column,
+  .boot-hero-panel
+) > * {
+  @include pageCard.toolkit-page-enter(calc(var(--page-enter-delay, 0ms) + 40ms), 360ms);
+}
+
+.page-content > * > :where(
+  .top-row,
+  .main-split-container,
+  .main-body,
+  .content-area,
+  .control-layout,
+  .left-column,
+  .right-column,
+  .boot-hero-panel
+) > :nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.page-content > * > :where(
+  .top-row,
+  .main-split-container,
+  .main-body,
+  .content-area,
+  .control-layout,
+  .left-column,
+  .right-column,
+  .boot-hero-panel
+) > :nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.page-content > * > :where(
+  .top-row,
+  .main-split-container,
+  .main-body,
+  .content-area,
+  .control-layout,
+  .left-column,
+  .right-column,
+  .boot-hero-panel
+) > :nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.page-content > * > :where(
+  .top-row,
+  .main-split-container,
+  .main-body,
+  .content-area,
+  .control-layout,
+  .left-column,
+  .right-column,
+  .boot-hero-panel
+) > :nth-child(4) {
+  --page-enter-delay: 120ms;
 }

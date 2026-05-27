@@ -41,9 +41,12 @@ defineProps({
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/styles/_page-card.scss' as pageCard;
+
 .about-header {
   text-align: center;
   margin-bottom: 48px;
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 360ms);
 }
 
 .logo-wrapper {

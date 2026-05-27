@@ -85,6 +85,30 @@ watch(localCommands, (value) => {
   min-height: 200px;
 }
 
+.cards-grid > *:nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.cards-grid > *:nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.cards-grid > *:nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.cards-grid > *:nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.cards-grid > *:nth-child(5) {
+  --page-enter-delay: 160ms;
+}
+
+.cards-grid > *:nth-child(6) {
+  --page-enter-delay: 200ms;
+}
+
 .drag-ghost {
   opacity: 0.4;
   border: 2px dashed var(--color-primary) !important;

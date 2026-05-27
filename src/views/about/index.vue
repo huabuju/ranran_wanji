@@ -185,6 +185,8 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/styles/_page-card.scss' as pageCard;
+
 .about-container {
   flex: 1;
   display: flex;
@@ -197,7 +199,31 @@ onMounted(async () => {
 }
 
 .section-fade-in {
-  animation: fadeInUp 0.6s ease-out forwards;
+  @include pageCard.toolkit-page-enter(var(--page-enter-delay, 0ms), 420ms);
+}
+
+.about-container > :nth-child(1) {
+  --page-enter-delay: 0ms;
+}
+
+.about-container > :nth-child(2) {
+  --page-enter-delay: 40ms;
+}
+
+.about-container > :nth-child(3) {
+  --page-enter-delay: 80ms;
+}
+
+.about-container > :nth-child(4) {
+  --page-enter-delay: 120ms;
+}
+
+.about-container > :nth-child(5) {
+  --page-enter-delay: 160ms;
+}
+
+.about-container > :nth-child(6) {
+  --page-enter-delay: 200ms;
 }
 
 .about-footer .copyright {
@@ -205,17 +231,5 @@ onMounted(async () => {
   color: var(--color-text-muted);
   opacity: 0.7;
   margin: 0;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 </style>
