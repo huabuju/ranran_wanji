@@ -301,6 +301,7 @@ defineExpose({
   flex-direction: column;
   align-items: flex-end;
   pointer-events: none;
+  background: #fff;
 }
 
 .log-drawer-panel {
