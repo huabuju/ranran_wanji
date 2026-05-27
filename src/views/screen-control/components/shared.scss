@@ -6,21 +6,30 @@
   border: 1px solid var(--border-strong) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: var(--shadow-card) !important;
-  @include pageCard.overview-main-card-hoverable(var(--bg-glass));
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+
+  &:hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(var(--color-primary-rgb), 0.32) !important;
+    box-shadow:
+      0 18px 40px -20px rgba(15, 23, 42, 0.18),
+      0 4px 12px -4px rgba(15, 23, 42, 0.06) !important;
+  }
 
   :deep(.el-card__header) {
-    padding: 18px 24px 14px 24px;
+    padding: 16px 22px 14px;
     border-bottom: 1px solid var(--color-divider);
   }
 
   :deep(.el-card__body) {
-    padding: 24px;
+    padding: 22px;
   }
 }
 
 .card-header {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  gap: 8px;
+  gap: 0;
   color: var(--color-text-primary);
+  width: 100%;
 }

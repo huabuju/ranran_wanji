@@ -45,7 +45,9 @@ defineEmits(['launch', 'stop']);
 
 .action-btn {
   flex: 1;
-  padding: 10px 16px !important;
+  height: 42px;
+  line-height: 1;
+  padding: 0 18px !important;
   font-size: 14px;
   font-weight: 600;
   border: none !important;
