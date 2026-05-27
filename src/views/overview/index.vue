@@ -344,4 +344,9 @@ onUnmounted(() => {
   flex-shrink: 0;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .page-container :deep(.dashboard-card) {
+    animation: none !important;
+  }
+}
 </style>
