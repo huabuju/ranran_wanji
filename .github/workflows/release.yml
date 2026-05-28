@@ -35,8 +35,6 @@ jobs:
       - name: Build the app
         run: yarn build:all
 
-      - name: Build runtime assets
-        run: yarn build:runtime-assets
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -46,7 +44,6 @@ jobs:
             src-tauri/target/release/bundle/portable/*.zip
             src-tauri/target/release/bundle/msi/*.msi
             src-tauri/target/release/bundle/nsis/*.exe
-            bin/cloud-parts/*
           if-no-files-found: error
 
       - name: Publish GitHub Release
@@ -57,5 +54,4 @@ jobs:
             src-tauri/target/release/bundle/portable/*.zip
             src-tauri/target/release/bundle/msi/*.msi
             src-tauri/target/release/bundle/nsis/*.exe
-            bin/cloud-parts/*
           generate_release_notes: true
