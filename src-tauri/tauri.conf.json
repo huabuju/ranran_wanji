@@ -38,6 +38,7 @@
     "active": true,
     "targets": "all",
     "resources": {
+      "../bin/ranran_toolkit_cmd_menu.bat": "bin/ranran_toolkit_cmd_menu.bat",
       "../bin/7-Zip-core": "bin/7-Zip-core",
       "../bin/app-tools": "bin/app-tools",
       "../bin/aria2-core": "bin/aria2-core",

@@ -46,7 +46,7 @@
     <div class="status-right flex-y-center">
       <el-button type="info" link class="status-btn" @click="openCmd">
         <SmartIcon name="terminal" color="var(--color-info)" :size="10" />
-        <span class="btn-text">CMD</span>
+        <span class="btn-text">CMD 菜单</span>
       </el-button>
       <el-button type="info" link class="status-btn" @click="openTaskManager">
         <SmartIcon name="monitor_pc" color="var(--color-success)" :size="10" />

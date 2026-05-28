@@ -17,14 +17,20 @@ const OUTPUT_DIR = path.join(ROOT_DIR, 'src-tauri', 'target', 'release', 'bundle
 const ZIP_NAME = `${APP_NAME}-v${VERSION}-${DATE_VERSION}-portable-windows-x86_64.zip`;
 const ZIP_PATH = path.join(OUTPUT_DIR, ZIP_NAME);
 
-function getPackagedBinDirectories() {
+function getPackagedBinEntries() {
   if (!fs.existsSync(BIN_DIR)) {
-    return [];
+    return { directories: [], files: [] };
   }
 
-  return fs.readdirSync(BIN_DIR, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && entry.name !== 'cloud-parts')
-    .map((entry) => entry.name);
+  const entries = fs.readdirSync(BIN_DIR, { withFileTypes: true });
+  return {
+    directories: entries
+      .filter((entry) => entry.isDirectory() && entry.name !== 'cloud-parts')
+      .map((entry) => entry.name),
+    files: entries
+      .filter((entry) => entry.isFile() && entry.name !== '.git')
+      .map((entry) => entry.name),
+  };
 }
 
 async function buildZip() {
@@ -42,7 +48,7 @@ async function buildZip() {
   return new Promise((resolve, reject) => {
     const output = fs.createWriteStream(ZIP_PATH);
     const archive = archiver('zip', { zlib: { level: 9 } });
-    const packagedBinDirectories = getPackagedBinDirectories();
+    const packagedBinEntries = getPackagedBinEntries();
 
     output.on('close', resolve);
     archive.on('warning', (error) => {
@@ -56,8 +62,11 @@ async function buildZip() {
 
     archive.pipe(output);
     archive.file(EXE_SRC, { name: `${APP_NAME}.exe` });
-    for (const directoryName of packagedBinDirectories) {
+    for (const directoryName of packagedBinEntries.directories) {
       archive.directory(path.join(BIN_DIR, directoryName), path.join('bin', directoryName));
+    }
+    for (const fileName of packagedBinEntries.files) {
+      archive.file(path.join(BIN_DIR, fileName), { name: path.posix.join('bin', fileName) });
     }
     archive.finalize();
   });

@@ -43,20 +43,29 @@ enum CleanupTarget {
     TempPrefix(String),
 }
 
+const CMD_MENU_SCRIPT_NAME: &str = "ranran_toolkit_cmd_menu.bat";
+
 // ==============================
-// Command: 在 platform-tools 目录打开 CMD
+// Command: 打开 bin 目录下的 CMD 菜单
 // ==============================
 #[tauri::command]
 pub fn open_platform_tools_cmd(paths: State<'_, AppPaths>) -> Result<(), String> {
-    let dir = paths
+    let bin_dir = paths
         .adb
         .parent()
-        .ok_or_else(|| "无法获取 platform-tools 目录".to_string())?;
+        .and_then(|p| p.parent())
+        .ok_or_else(|| "无法获取 bin 目录".to_string())?;
+    let menu_script = bin_dir.join(CMD_MENU_SCRIPT_NAME);
+
+    if !menu_script.is_file() {
+        return Err(format!("未找到 CMD 菜单脚本: {}", menu_script.display()));
+    }
+
     StdCommand::new("cmd")
-        .current_dir(dir)
-        // 不隐藏 CMD 窗口，使用户可见
+        .args(["/K", CMD_MENU_SCRIPT_NAME])
+        .current_dir(bin_dir)
         .spawn()
-        .map_err(|e| format!("打开 CMD 失败: {}", e))?;
+        .map_err(|e| format!("打开 CMD 菜单失败: {}", e))?;
     Ok(())
 }
 
