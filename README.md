@@ -1,3 +1,5 @@
+> **⚠️ 声明：本仓库仅为个人学习和 CI/CD 测试使用。源码同步自 Gitee 原仓库 [RanranToolkit](https://gitee.com/xiaowan12/toolkit-tauri-app)，版权和解释权归原作者所有，并非本人原创。**
+
 <div align="center">
 
 # 🔧 RanranToolkit (然然玩机工具箱)
